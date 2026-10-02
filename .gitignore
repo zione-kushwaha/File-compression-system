@@ -1,0 +1,20 @@
+# Runtime & Portable Tools
+tools/php/
+tools/*.zip
+
+# Storage & User Data
+storage/uploads/*
+!storage/uploads/.gitkeep
+storage/compressed/*
+!storage/compressed/.gitkeep
+storage/decompressed/*
+!storage/decompressed/.gitkeep
+storage/*.sqlite
+storage/*.sqlite-journal
+
+# Temporary & Environment
+*.log
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
