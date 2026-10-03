@@ -1,0 +1,6 @@
+Huffman Coding and Information Theory Demonstration:
+ABRACADABRA! Huffman coding is an entropy encoding algorithm used for lossless data compression.
+The algorithm assigns variable-length codes to input characters, lengths of the assigned codes are based on the frequencies of corresponding characters.
+The most frequent character gets the smallest code and the least frequent character gets the largest code.
+Security: Enhanced with AES-256-CBC and PBKDF2 authenticated encryption with HMAC-SHA256 integrity protection.
+Lossless reconstruction 100% verified.
