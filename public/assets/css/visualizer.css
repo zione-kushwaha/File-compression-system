@@ -1,0 +1,401 @@
+/* ==========================================================================
+   Huffman Tree Visualizer & Data Vault Styles
+   ========================================================================== */
+
+/* Visualizer Container */
+.visualizer-wrapper {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.8rem;
+}
+
+.tree-card-container {
+    position: relative;
+    padding: 1.5rem;
+    overflow: hidden;
+    min-height: 480px;
+    display: flex;
+    flex-direction: column;
+}
+
+.tree-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    padding-bottom: 0.85rem;
+    border-bottom: 1px solid var(--border-subtle);
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.tree-title-group h3 {
+    font-size: 1.15rem;
+    font-weight: 600;
+}
+
+.tree-btn-group {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.ctrl-btn {
+    padding: 0.45rem 0.85rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    transition: all var(--transition-fast);
+}
+
+.ctrl-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-main);
+    border-color: var(--border-active);
+}
+
+.svg-canvas-container {
+    flex: 1;
+    width: 100%;
+    height: 420px;
+    background: radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.04) 0%, rgba(10, 14, 26, 0.95) 100%);
+    border-radius: var(--radius-md);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    overflow: auto;
+    position: relative;
+    cursor: grab;
+}
+
+.svg-canvas-container:active {
+    cursor: grabbing;
+}
+
+/* Tree SVG Elements */
+.tree-node-circle {
+    fill: #1e293b;
+    stroke: var(--primary);
+    stroke-width: 2px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.tree-node-circle:hover {
+    fill: var(--primary);
+    stroke: #ffffff;
+    filter: drop-shadow(0 0 8px rgba(99, 102, 241, 0.8));
+}
+
+.tree-node-leaf {
+    fill: #064e3b;
+    stroke: var(--accent-emerald);
+}
+
+.tree-node-leaf:hover {
+    fill: var(--accent-emerald);
+    filter: drop-shadow(0 0 10px rgba(16, 185, 129, 0.8));
+}
+
+.tree-link {
+    fill: none;
+    stroke: rgba(148, 163, 184, 0.3);
+    stroke-width: 1.5px;
+}
+
+.tree-edge-label {
+    font-size: 11px;
+    font-weight: 700;
+    fill: var(--accent-cyan);
+    font-family: var(--font-mono);
+}
+
+.tree-node-text {
+    font-size: 11px;
+    font-family: var(--font-mono);
+    fill: #ffffff;
+    text-anchor: middle;
+    dominant-baseline: central;
+    pointer-events: none;
+}
+
+/* Codebook & Metrics Section */
+.codebook-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 1.8rem;
+}
+
+@media (max-width: 1024px) {
+    .codebook-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.table-card {
+    padding: 1.5rem;
+    overflow: hidden;
+}
+
+.table-header-box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.25rem;
+}
+
+.search-input-sm {
+    padding: 0.45rem 0.85rem;
+    background: rgba(7, 9, 14, 0.6);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    color: var(--text-main);
+    font-size: 0.8rem;
+    outline: none;
+    width: 180px;
+    transition: border-color var(--transition-fast);
+}
+
+.search-input-sm:focus {
+    border-color: var(--primary);
+}
+
+.table-responsive {
+    max-height: 380px;
+    overflow-y: auto;
+}
+
+.custom-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.825rem;
+}
+
+.custom-table th {
+    background: rgba(14, 20, 36, 0.9);
+    position: sticky;
+    top: 0;
+    padding: 0.75rem 1rem;
+    text-align: left;
+    color: var(--text-dim);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-size: 0.725rem;
+    border-bottom: 1px solid var(--border-subtle);
+    z-index: 10;
+}
+
+.custom-table td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    color: var(--text-main);
+}
+
+.custom-table tr:hover td {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.symbol-badge {
+    font-family: var(--font-mono);
+    padding: 2px 7px;
+    border-radius: 4px;
+    background: rgba(99, 102, 241, 0.15);
+    color: var(--primary-light);
+    border: 1px solid rgba(99, 102, 241, 0.3);
+    font-weight: 600;
+}
+
+.code-badge {
+    font-family: var(--font-mono);
+    color: var(--accent-cyan);
+    letter-spacing: 0.08em;
+    font-weight: 600;
+}
+
+/* Theory & Entropy Cards */
+.theory-card {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.formula-box {
+    background: rgba(7, 9, 14, 0.7);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: 1.15rem;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: #cbd5e1;
+    line-height: 1.6;
+}
+
+.formula-box .highlight {
+    color: var(--accent-cyan);
+    font-weight: 700;
+}
+
+.metric-bar-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+}
+
+.metric-row-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    margin-bottom: 0.3rem;
+}
+
+.metric-track {
+    height: 8px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.metric-progress {
+    height: 100%;
+    border-radius: 4px;
+    background: linear-gradient(to right, var(--primary), var(--accent-cyan));
+    transition: width 0.6s ease;
+}
+
+/* Vault Management Table */
+.vault-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.vault-actions {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.tag-encrypted {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 12px;
+    background: rgba(244, 63, 94, 0.15);
+    border: 1px solid rgba(244, 63, 94, 0.35);
+    color: var(--accent-rose);
+}
+
+.tag-plain {
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 12px;
+    background: rgba(148, 163, 184, 0.1);
+    border: 1px solid rgba(148, 163, 184, 0.25);
+    color: var(--text-dim);
+}
+
+.tag-algo {
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 12px;
+    background: rgba(6, 182, 212, 0.15);
+    border: 1px solid rgba(6, 182, 212, 0.35);
+    color: var(--accent-cyan);
+}
+
+/* Modal Window */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(8px);
+    z-index: 200;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+}
+
+.modal-overlay.active {
+    display: flex;
+    animation: fadeIn 0.2s ease;
+}
+
+.modal-content {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-active);
+    border-radius: var(--radius-lg);
+    width: 100%;
+    max-width: 500px;
+    padding: 2rem;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.25rem;
+}
+
+.modal-close-btn {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-size: 1.25rem;
+}
+
+/* Architecture Documentation Tab */
+.arch-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.arch-layer-card {
+    padding: 1.5rem;
+    border-left: 4px solid var(--primary);
+}
+
+.arch-layer-card.infra {
+    border-left-color: var(--accent-cyan);
+}
+
+.arch-layer-card.core {
+    border-left-color: var(--accent-emerald);
+}
+
+.arch-layer-card.pres {
+    border-left-color: var(--accent-purple);
+}
+
+.arch-layer-card h4 {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.arch-layer-card p {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+}
