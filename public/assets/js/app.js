@@ -1,5 +1,6 @@
 /**
- * Secure File Compression System - Primary Frontend Application Controller
+ * File Compression System - Primary Frontend Application Controller
+ * Lossless Huffman Coding Algorithm Implementation
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -7,11 +8,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let isAuthenticated = false;
     let selectedCompressFile = null;
     let selectedDecompressFile = null;
-    let selectedAlgorithm = 'huffman';
-    let isEncryptionEnabled = false;
-
-    // Initialize visualizer
-    const visualizer = new HuffmanVisualizer('svgCanvasContainer');
 
     // DOM Elements - Navigation Tabs
     const tabButtons = document.querySelectorAll('.tab-btn');
@@ -35,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // -------------------------------------------------------------
-    // Compression Tab Handling
+    // Compression Tab Handling (Huffman Coding)
     // -------------------------------------------------------------
     const dropzoneCompress = document.getElementById('dropzoneCompress');
     const fileInputCompress = document.getElementById('fileInputCompress');
@@ -46,59 +42,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnCompressSubmit = document.getElementById('btnCompressSubmit');
     const compressSpinner = document.getElementById('compressSpinner');
     const compressBtnText = document.getElementById('compressBtnText');
-
-    // Algorithm cards
-    const algoCards = document.querySelectorAll('.algo-card');
-    algoCards.forEach(card => {
-        card.addEventListener('click', () => {
-            algoCards.forEach(c => c.classList.remove('selected'));
-            card.classList.add('selected');
-            selectedAlgorithm = card.getAttribute('data-algo');
-        });
-    });
-
-    // Encryption toggle & Password Strength
-    const encryptToggle = document.getElementById('encryptToggle');
-    const passwordBox = document.getElementById('passwordBox');
-    const compressPasswordInput = document.getElementById('compressPasswordInput');
-    const strengthFill = document.getElementById('strengthFill');
-    const strengthLabel = document.getElementById('strengthLabel');
-    const togglePwdBtn = document.getElementById('togglePwdBtn');
-
-    if (encryptToggle) {
-        encryptToggle.addEventListener('change', () => {
-            isEncryptionEnabled = encryptToggle.checked;
-            if (isEncryptionEnabled) {
-                passwordBox.classList.add('active');
-                compressPasswordInput.focus();
-            } else {
-                passwordBox.classList.remove('active');
-                compressPasswordInput.value = '';
-                updateStrengthMeter('');
-            }
-        });
-    }
-
-    if (compressPasswordInput) {
-        compressPasswordInput.addEventListener('input', (e) => {
-            updateStrengthMeter(e.target.value);
-        });
-    }
-
-    function updateStrengthMeter(pwd) {
-        const result = CryptoUtils.evaluatePasswordStrength(pwd);
-        strengthFill.style.width = result.percent + '%';
-        strengthFill.style.backgroundColor = result.color;
-        strengthLabel.textContent = `Strength: ${result.label}`;
-        strengthLabel.style.color = result.color;
-    }
-
-    if (togglePwdBtn) {
-        togglePwdBtn.addEventListener('click', () => {
-            const isPassword = compressPasswordInput.type === 'password';
-            compressPasswordInput.type = isPassword ? 'text' : 'password';
-        });
-    }
 
     // Drag and drop for compress (Gated by Authentication)
     if (dropzoneCompress && fileInputCompress) {
@@ -132,18 +75,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
             if (e.dataTransfer.files.length > 0) {
-                handleFileSelect(e.dataTransfer.files[0]);
+                handleCompressFileSelect(e.dataTransfer.files[0]);
             }
         });
 
         fileInputCompress.addEventListener('change', (e) => {
             if (e.target.files.length > 0) {
-                handleFileSelect(e.target.files[0]);
+                handleCompressFileSelect(e.target.files[0]);
             }
         });
     }
 
-    async function handleFileSelect(file) {
+    function handleCompressFileSelect(file) {
         selectedCompressFile = file;
         fileNamePreview.textContent = file.name;
         fileSizePreview.textContent = CryptoUtils.formatBytes(file.size);
@@ -163,27 +106,18 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Submit Compression Form
+    // Submit Compression Request
     if (btnCompressSubmit) {
         btnCompressSubmit.addEventListener('click', async () => {
             if (!selectedCompressFile) return;
 
-            const password = isEncryptionEnabled ? compressPasswordInput.value.trim() : '';
-            if (isEncryptionEnabled && !password) {
-                showToast('Please enter an encryption password.', 'error');
-                compressPasswordInput.focus();
-                return;
-            }
-
-            // Start loading state
             btnCompressSubmit.disabled = true;
             compressSpinner.style.display = 'inline-block';
-            compressBtnText.textContent = 'Compressing & Securing...';
+            compressBtnText.textContent = 'Compressing (Huffman)...';
 
             const formData = new FormData();
             formData.append('file', selectedCompressFile);
-            formData.append('algorithm', selectedAlgorithm);
-            formData.append('password', password);
+            formData.append('algorithm', 'huffman');
 
             try {
                 const response = await fetch('api.php?action=compress', {
@@ -194,23 +128,23 @@ document.addEventListener('DOMContentLoaded', () => {
                 const data = await response.json();
 
                 if (!response.ok || !data.success) {
-                    throw new Error(data.error || 'Compression failed on server.');
+                    if (data.requireAuth) {
+                        showToast('🔒 Please sign in to compress files.', 'info');
+                        document.getElementById('authModalOverlay')?.classList.add('active');
+                        return;
+                    }
+                    throw new Error(data.error || 'Compression failed.');
                 }
 
-                showToast('File compressed & secured successfully!', 'success');
+                showToast('File compressed successfully with Huffman Coding!', 'success');
                 displayCompressionResult(data);
-
-                // If huffman, render tree & codebook
-                if (data.tree) {
-                    visualizer.render(data.tree, data.codebook, data.stats);
-                }
 
             } catch (err) {
                 showToast(err.message, 'error');
             } finally {
                 btnCompressSubmit.disabled = false;
                 compressSpinner.style.display = 'none';
-                compressBtnText.textContent = 'Compress & Secure File';
+                compressBtnText.textContent = 'Compress File (Huffman)';
             }
         });
     }
@@ -224,7 +158,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const ratioEl = document.getElementById('resRatio');
         const hashEl = document.getElementById('resChecksum');
         const downloadBtn = document.getElementById('resDownloadBtn');
-        const viewTreeBtn = document.getElementById('resViewTreeBtn');
 
         origSizeEl.textContent = CryptoUtils.formatBytes(data.file.originalSize);
         compSizeEl.textContent = CryptoUtils.formatBytes(data.file.compressedSize);
@@ -234,16 +167,7 @@ document.addEventListener('DOMContentLoaded', () => {
         hashEl.textContent = data.file.sha256Checksum;
         downloadBtn.href = data.downloadUrl;
 
-        if (data.file.algorithm === 'huffman') {
-            viewTreeBtn.style.display = 'inline-flex';
-            viewTreeBtn.onclick = () => {
-                document.querySelector('.tab-btn[data-tab="visualizerTab"]').click();
-            };
-        } else {
-            viewTreeBtn.style.display = 'none';
-        }
-
-        // Intelligent Educational Tip for Pre-compressed files
+        // Educational note for pre-compressed files
         let tipEl = document.getElementById('resEntropyTip');
         if (!tipEl) {
             tipEl = document.createElement('div');
@@ -258,7 +182,7 @@ document.addEventListener('DOMContentLoaded', () => {
             tipEl.style.border = '1px solid rgba(245, 158, 11, 0.3)';
             tipEl.style.color = '#fbbf24';
             const ext = data.file.originalName.split('.').pop().toUpperCase();
-            tipEl.innerHTML = `<span>💡</span><div><strong>Pre-compressed file (${ext}):</strong> PDFs, JPGs, and ZIPs are already compressed. Applying Huffman adds header metadata (Shannon Entropy Limit). Try a <code>.txt</code>, <code>.csv</code>, or code file to see 30%–60% size reduction!</div>`;
+            tipEl.innerHTML = `<span>💡</span><div><strong>Pre-compressed file (${ext}):</strong> High-entropy formats (PDF/JPG/ZIP) are already compressed. Adding Huffman's frequency header results in slight overhead. Uncompressed text/code files achieve significant size reduction.</div>`;
         } else {
             tipEl.style.display = 'none';
         }
@@ -279,7 +203,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnDecompressSubmit = document.getElementById('btnDecompressSubmit');
     const decompressSpinner = document.getElementById('decompressSpinner');
     const decompressBtnText = document.getElementById('decompressBtnText');
-    const decompressPasswordInput = document.getElementById('decompressPasswordInput');
 
     if (dropzoneDecompress && fileInputDecompress) {
         dropzoneDecompress.addEventListener('click', () => {
@@ -347,17 +270,12 @@ document.addEventListener('DOMContentLoaded', () => {
         btnDecompressSubmit.addEventListener('click', async () => {
             if (!selectedDecompressFile) return;
 
-            const password = decompressPasswordInput ? decompressPasswordInput.value.trim() : '';
-
             btnDecompressSubmit.disabled = true;
             decompressSpinner.style.display = 'inline-block';
-            decompressBtnText.textContent = 'Decompressing & Verifying...';
+            decompressBtnText.textContent = 'Restoring File...';
 
             const formData = new FormData();
             formData.append('file', selectedDecompressFile);
-            if (password) {
-                formData.append('password', password);
-            }
 
             try {
                 const response = await fetch('api.php?action=decompress', {
@@ -368,19 +286,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 const data = await response.json();
 
                 if (!response.ok || !data.success) {
-                    if (data.isPasswordRequired) {
-                        showToast(data.message, 'info');
-                        const pwdGroup = document.getElementById('decompressPasswordGroup');
-                        if (pwdGroup) {
-                            pwdGroup.style.display = 'block';
-                            decompressPasswordInput.focus();
-                        }
-                        return;
-                    }
                     throw new Error(data.error || 'Decompression failed.');
                 }
 
-                showToast('File restored and SHA-256 integrity verified!', 'success');
+                showToast('File restored and SHA-256 verified successfully!', 'success');
                 displayDecompressResult(data);
 
             } catch (err) {
@@ -414,18 +323,18 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // -------------------------------------------------------------
-    // Vault Management Table
+    // My Files Table Handling
     // -------------------------------------------------------------
     async function loadVaultFiles() {
         const tbody = document.getElementById('vaultTableBody');
         if (!tbody) return;
 
         if (!isAuthenticated) {
-            tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:2.5rem; color:var(--text-dim); font-size:0.9rem;">🔒 Vault is locked. Please sign in with the Demo account or register to access saved archives.</td></tr>`;
+            tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:2.5rem; color:var(--text-dim); font-size:0.9rem;">🔒 Please sign in with the Demo account to access your saved files.</td></tr>`;
             return;
         }
 
-        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:2rem; color:var(--text-dim);">Loading vault records...</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:2rem; color:var(--text-dim);">Loading files...</td></tr>`;
 
         try {
             const resp = await fetch('api.php?action=list');
@@ -433,20 +342,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (!resp.ok || !data.success) {
                 if (data.requireAuth) {
-                    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:2.5rem; color:var(--text-dim);">🔒 Sign in required to view vault archives.</td></tr>`;
+                    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:2.5rem; color:var(--text-dim);">🔒 Sign in required to view files.</td></tr>`;
                     return;
                 }
                 throw new Error(data.error || 'Failed to fetch files');
             }
 
-            // Update database status pill
             const dbBadge = document.getElementById('dbStatusBadge');
-            if (dbBadge) {
+            if (dbBadge && data.database) {
                 dbBadge.textContent = data.database.toUpperCase();
             }
 
             if (data.files.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:2.5rem; color:var(--text-dim);">Vault is empty. Compress a file to get started.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:2.5rem; color:var(--text-dim);">No compressed files found. Compress a file to get started!</td></tr>`;
                 return;
             }
 
@@ -457,10 +365,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <div style="font-size:0.7rem; color:var(--text-dim); font-family:var(--font-mono);">${f.storedName}</div>
                     </td>
                     <td>
-                        <span class="tag-algo">${f.algorithm.toUpperCase()}</span>
-                    </td>
-                    <td>
-                        ${f.isEncrypted ? `<span class="tag-encrypted"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> AES-256</span>` : `<span class="tag-plain">None</span>`}
+                        <span class="tag-algo">HUFFMAN</span>
                     </td>
                     <td>${CryptoUtils.formatBytes(f.originalSize)}</td>
                     <td>${CryptoUtils.formatBytes(f.compressedSize)}</td>
@@ -474,9 +379,6 @@ document.addEventListener('DOMContentLoaded', () => {
                             <a href="api.php?action=download&id=${f.id}" class="ctrl-btn" title="Download Archive">
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                             </a>
-                            <button onclick="window.decompressVaultItem(${f.id}, ${f.isEncrypted})" class="ctrl-btn" title="Decompress">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-                            </button>
                             <button onclick="window.deleteVaultItem(${f.id})" class="ctrl-btn" style="color:var(--accent-rose);" title="Delete">
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
                             </button>
@@ -486,12 +388,12 @@ document.addEventListener('DOMContentLoaded', () => {
             `).join('');
 
         } catch (err) {
-            tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:2rem; color:var(--accent-rose);">Error: ${err.message}</td></tr>`;
+            tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:2rem; color:var(--accent-rose);">Error: ${err.message}</td></tr>`;
         }
     }
 
     window.deleteVaultItem = async function(id) {
-        if (!confirm('Are you sure you want to permanently delete this file record and archive?')) return;
+        if (!confirm('Are you sure you want to permanently delete this file record?')) return;
         try {
             const formData = new FormData();
             formData.append('id', id);
@@ -508,126 +410,66 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    window.decompressVaultItem = async function(id, isEncrypted) {
-        let password = '';
-        if (isEncrypted) {
-            password = prompt('Enter AES-256 password for this archive:');
-            if (password === null) return;
-        }
-
-        showToast('Decompressing file from vault...', 'info');
-
-        const formData = new FormData();
-        formData.append('file_id', id);
-        if (password) formData.append('password', password);
-
-        try {
-            const resp = await fetch('api.php?action=decompress', { method: 'POST', body: formData });
-            const data = await resp.json();
-
-            if (!resp.ok || !data.success) {
-                throw new Error(data.error || 'Decompression failed');
-            }
-
-            // Direct trigger download
-            window.location.href = data.downloadUrl;
-            showToast('Decompressed file downloaded!', 'success');
-        } catch (err) {
-            showToast(err.message, 'error');
-        }
-    };
-
     // -------------------------------------------------------------
-    // Audit Logs
+    // Activity Logs Handling
     // -------------------------------------------------------------
     async function loadAuditLogs() {
         const tbody = document.getElementById('logsTableBody');
         if (!tbody) return;
 
+        if (!isAuthenticated) {
+            tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:2.5rem; color:var(--text-dim); font-size:0.9rem;">🔒 Please sign in to view activity logs.</td></tr>`;
+            return;
+        }
+
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:2rem; color:var(--text-dim);">Loading activity trail...</td></tr>`;
+
         try {
             const resp = await fetch('api.php?action=logs');
             const data = await resp.json();
 
+            if (!resp.ok || !data.success) {
+                if (data.requireAuth) {
+                    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:2.5rem; color:var(--text-dim);">🔒 Sign in required to view activity logs.</td></tr>`;
+                    return;
+                }
+                throw new Error(data.error || 'Failed to load logs');
+            }
+
             if (data.logs.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:2rem; color:var(--text-dim);">No audit logs recorded yet.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:2.5rem; color:var(--text-dim);">No activity logs yet.</td></tr>`;
                 return;
             }
 
-            tbody.innerHTML = data.logs.map(l => `
+            tbody.innerHTML = data.logs.map(log => `
                 <tr>
-                    <td style="font-size:0.75rem; color:var(--text-dim); font-family:var(--font-mono);">${l.createdAt}</td>
-                    <td><strong>${l.action}</strong></td>
-                    <td style="max-width:180px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${escapeHtml(l.filename)}</td>
+                    <td style="font-family:var(--font-mono); font-size:0.8rem; color:var(--text-dim);">${log.timestamp}</td>
                     <td>
-                        <span style="font-size:0.7rem; font-weight:700; color:${l.status === 'SUCCESS' ? 'var(--accent-emerald)' : 'var(--accent-rose)'};">
-                            ${l.status}
+                        <span class="badge-action ${log.action.includes('error') ? 'badge-err' : ''}">${escapeHtml(log.action)}</span>
+                    </td>
+                    <td style="max-width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${escapeHtml(log.targetFile || '-')}</td>
+                    <td>
+                        <span style="color:${log.status === 'success' ? 'var(--accent-emerald)' : 'var(--accent-rose)'}; font-weight:600; text-transform:uppercase; font-size:0.75rem;">
+                            ${escapeHtml(log.status)}
                         </span>
                     </td>
-                    <td style="font-size:0.75rem; color:var(--text-dim); font-family:var(--font-mono);">${l.ipAddress || '127.0.0.1'}</td>
-                    <td style="font-size:0.75rem; color:var(--text-muted);">${escapeHtml(l.details || '')}</td>
+                    <td style="font-family:var(--font-mono); font-size:0.8rem;">${escapeHtml(log.ipAddress || '127.0.0.1')}</td>
+                    <td style="font-size:0.825rem; color:var(--text-dim); max-width:240px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${escapeHtml(log.details || '-')}</td>
                 </tr>
             `).join('');
 
         } catch (err) {
-            tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:2rem; color:var(--accent-rose);">Error loading logs</td></tr>`;
+            tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:2rem; color:var(--accent-rose);">Error: ${err.message}</td></tr>`;
         }
     }
 
-    // Visualizer Controls
-    const btnZoomIn = document.getElementById('btnZoomIn');
-    const btnZoomOut = document.getElementById('btnZoomOut');
-    const btnResetZoom = document.getElementById('btnResetZoom');
-
-    if (btnZoomIn) btnZoomIn.addEventListener('click', () => visualizer.zoom(0.2));
-    if (btnZoomOut) btnZoomOut.addEventListener('click', () => visualizer.zoom(-0.2));
-    if (btnResetZoom) btnResetZoom.addEventListener('click', () => visualizer.resetZoom());
-
-    // Copy Checksum button
-    const copyChecksumBtn = document.getElementById('copyChecksumBtn');
-    if (copyChecksumBtn) {
-        copyChecksumBtn.addEventListener('click', () => {
-            const text = document.getElementById('resChecksum').textContent;
-            navigator.clipboard.writeText(text).then(() => {
-                showToast('SHA-256 Checksum copied to clipboard!', 'info');
-            });
-        });
-    }
-
-    // Toast Utility
-    function showToast(message, type = 'info') {
-        const container = document.getElementById('toastContainer');
-        if (!container) return;
-
-        const toast = document.createElement('div');
-        toast.className = `toast toast-${type}`;
-        toast.innerHTML = `
-            <span>${escapeHtml(message)}</span>
-        `;
-
-        container.appendChild(toast);
-        setTimeout(() => {
-            toast.style.opacity = '0';
-            toast.style.transform = 'translateY(10px)';
-            toast.style.transition = 'all 0.3s ease';
-            setTimeout(() => toast.remove(), 300);
-        }, 4000);
-    }
-
-    function escapeHtml(str) {
-        if (!str) return '';
-        return String(str)
-            .replace(/&/g, '&amp;')
-            .replace(/</g, '&lt;')
-            .replace(/>/g, '&gt;')
-            .replace(/"/g, '&quot;')
-            .replace(/'/g, '&#039;');
-    }
-
     // -------------------------------------------------------------
-    // Authentication Modal & State Handling
+    // Authentication Handling (Sign In / Register / Session)
     // -------------------------------------------------------------
     const authModalOverlay = document.getElementById('authModalOverlay');
     const btnOpenAuthModal = document.getElementById('btnOpenAuthModal');
+    const btnBannerOpenAuth = document.getElementById('btnBannerOpenAuth');
+    const btnQuickDemoLogin = document.getElementById('btnQuickDemoLogin');
     const btnCloseAuthModal = document.getElementById('btnCloseAuthModal');
     const btnSwitchSignIn = document.getElementById('btnSwitchSignIn');
     const btnSwitchSignUp = document.getElementById('btnSwitchSignUp');
@@ -638,27 +480,46 @@ document.addEventListener('DOMContentLoaded', () => {
     const userAvatarText = document.getElementById('userAvatarText');
     const btnLogout = document.getElementById('btnLogout');
     const btnFillDemoUser = document.getElementById('btnFillDemoUser');
+    const systemLockBanner = document.getElementById('systemLockBanner');
 
-    // Password visibility toggles
-    const btnToggleLoginPwd = document.getElementById('btnToggleLoginPwd');
-    const loginPassword = document.getElementById('loginPassword');
-    const btnToggleRegPwd = document.getElementById('btnToggleRegPwd');
-    const regPassword = document.getElementById('regPassword');
-
-    if (btnToggleLoginPwd && loginPassword) {
-        btnToggleLoginPwd.addEventListener('click', () => {
-            loginPassword.type = loginPassword.type === 'password' ? 'text' : 'password';
-        });
+    function updateAuthStateUI(user) {
+        if (user) {
+            isAuthenticated = true;
+            btnOpenAuthModal.style.display = 'none';
+            userProfileBadge.style.display = 'flex';
+            navUsername.textContent = user.username;
+            userAvatarText.textContent = user.username.charAt(0).toUpperCase();
+            if (systemLockBanner) systemLockBanner.style.display = 'none';
+        } else {
+            isAuthenticated = false;
+            btnOpenAuthModal.style.display = 'inline-flex';
+            userProfileBadge.style.display = 'none';
+            if (systemLockBanner) systemLockBanner.style.display = 'flex';
+        }
     }
 
-    if (btnToggleRegPwd && regPassword) {
-        btnToggleRegPwd.addEventListener('click', () => {
-            regPassword.type = regPassword.type === 'password' ? 'text' : 'password';
-        });
+    async function checkAuthStatus() {
+        try {
+            const resp = await fetch('api.php?action=auth_status');
+            const data = await resp.json();
+            if (data.authenticated && data.user) {
+                updateAuthStateUI(data.user);
+            } else {
+                updateAuthStateUI(null);
+            }
+        } catch {
+            updateAuthStateUI(null);
+        }
     }
 
     if (btnOpenAuthModal) {
         btnOpenAuthModal.addEventListener('click', () => {
+            authModalOverlay.classList.add('active');
+        });
+    }
+
+    if (btnBannerOpenAuth) {
+        btnBannerOpenAuth.addEventListener('click', () => {
             authModalOverlay.classList.add('active');
         });
     }
@@ -669,31 +530,26 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    if (authModalOverlay) {
-        authModalOverlay.addEventListener('click', (e) => {
-            if (e.target === authModalOverlay) {
-                authModalOverlay.classList.remove('active');
-            }
-        });
-    }
+    authModalOverlay.addEventListener('click', (e) => {
+        if (e.target === authModalOverlay) {
+            authModalOverlay.classList.remove('active');
+        }
+    });
 
-    if (btnSwitchSignIn && btnSwitchSignUp) {
-        btnSwitchSignIn.addEventListener('click', () => {
-            btnSwitchSignIn.classList.add('active');
-            btnSwitchSignUp.classList.remove('active');
-            formSignIn.classList.add('active');
-            formSignUp.classList.remove('active');
-        });
+    btnSwitchSignIn.addEventListener('click', () => {
+        btnSwitchSignIn.classList.add('active');
+        btnSwitchSignUp.classList.remove('active');
+        formSignIn.classList.add('active');
+        formSignUp.classList.remove('active');
+    });
 
-        btnSwitchSignUp.addEventListener('click', () => {
-            btnSwitchSignUp.classList.add('active');
-            btnSwitchSignIn.classList.remove('active');
-            formSignUp.classList.add('active');
-            formSignIn.classList.remove('active');
-        });
-    }
+    btnSwitchSignUp.addEventListener('click', () => {
+        btnSwitchSignUp.classList.add('active');
+        btnSwitchSignIn.classList.remove('active');
+        formSignUp.classList.add('active');
+        formSignIn.classList.remove('active');
+    });
 
-    // Auto-fill demo credentials
     if (btnFillDemoUser) {
         btnFillDemoUser.addEventListener('click', () => {
             document.getElementById('loginIdentifier').value = 'demo_user';
@@ -702,171 +558,170 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Sign In Submission
-    if (formSignIn) {
-        formSignIn.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const identifier = document.getElementById('loginIdentifier').value.trim();
-            const password = document.getElementById('loginPassword').value;
-            const spinner = document.getElementById('loginSpinner');
-            const btnText = document.getElementById('loginBtnText');
-            const submitBtn = document.getElementById('btnLoginSubmit');
+    async function performDemoLogin() {
+        const formData = new FormData();
+        formData.append('identifier', 'demo_user');
+        formData.append('password', 'Admin@123');
 
-            submitBtn.disabled = true;
-            spinner.style.display = 'inline-block';
-            btnText.textContent = 'Signing in...';
-
-            try {
-                const resp = await fetch('api.php?action=login', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ identifier, password })
-                });
-
-                const data = await resp.json();
-                if (!resp.ok || !data.success) {
-                    throw new Error(data.error || 'Login failed.');
-                }
-
-                showToast(`Welcome back, ${data.user.username}!`, 'success');
+        try {
+            const resp = await fetch('api.php?action=login', { method: 'POST', body: formData });
+            const data = await resp.json();
+            if (data.success) {
+                showToast(`Welcome, ${data.user.username}!`, 'success');
+                updateAuthStateUI(data.user);
                 authModalOverlay.classList.remove('active');
-                setAuthenticatedUI(data.user);
-                loadVaultFiles();
-            } catch (err) {
-                showToast(err.message, 'error');
-            } finally {
-                submitBtn.disabled = false;
-                spinner.style.display = 'none';
-                btnText.textContent = 'Sign In';
+            } else {
+                showToast(data.error || 'Demo login failed.', 'error');
             }
-        });
-    }
-
-    // Sign Up Submission
-    if (formSignUp) {
-        formSignUp.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const username = document.getElementById('regUsername').value.trim();
-            const email = document.getElementById('regEmail').value.trim();
-            const password = document.getElementById('regPassword').value;
-            const spinner = document.getElementById('regSpinner');
-            const btnText = document.getElementById('regBtnText');
-            const submitBtn = document.getElementById('btnRegisterSubmit');
-
-            submitBtn.disabled = true;
-            spinner.style.display = 'inline-block';
-            btnText.textContent = 'Creating account...';
-
-            try {
-                const resp = await fetch('api.php?action=register', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ username, email, password })
-                });
-
-                const data = await resp.json();
-                if (!resp.ok || !data.success) {
-                    throw new Error(data.error || 'Registration failed.');
-                }
-
-                showToast(`Account created! Welcome, ${data.user.username}!`, 'success');
-                authModalOverlay.classList.remove('active');
-                setAuthenticatedUI(data.user);
-                loadVaultFiles();
-            } catch (err) {
-                showToast(err.message, 'error');
-            } finally {
-                submitBtn.disabled = false;
-                spinner.style.display = 'none';
-                btnText.textContent = 'Create Account';
-            }
-        });
-    }
-
-    // System Lock Banner & 1-Click Demo Login
-    const systemLockBanner = document.getElementById('systemLockBanner');
-    const btnQuickDemoLogin = document.getElementById('btnQuickDemoLogin');
-    const btnBannerOpenAuth = document.getElementById('btnBannerOpenAuth');
-
-    if (btnBannerOpenAuth) {
-        btnBannerOpenAuth.addEventListener('click', () => {
-            authModalOverlay?.classList.add('active');
-        });
+        } catch {
+            showToast('Connection error during demo login.', 'error');
+        }
     }
 
     if (btnQuickDemoLogin) {
-        btnQuickDemoLogin.addEventListener('click', async () => {
-            btnQuickDemoLogin.disabled = true;
-            btnQuickDemoLogin.innerHTML = '<span>Signing In...</span>';
-            try {
-                const resp = await fetch('api.php?action=login', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ identifier: 'demo_user', password: 'Admin@123' })
-                });
-                const data = await resp.json();
-                if (!resp.ok || !data.success) {
-                    throw new Error(data.error || 'Demo login failed');
-                }
-                showToast(`Welcome back, ${data.user.username}! System Unlocked.`, 'success');
-                setAuthenticatedUI(data.user);
-                loadVaultFiles();
-            } catch (err) {
-                showToast(err.message, 'error');
-            } finally {
-                btnQuickDemoLogin.disabled = false;
-                btnQuickDemoLogin.innerHTML = '<span>⚡ 1-Click Demo Login</span>';
-            }
-        });
+        btnQuickDemoLogin.addEventListener('click', performDemoLogin);
     }
+
+    // Sign In Submit
+    formSignIn.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const ident = document.getElementById('loginIdentifier').value.trim();
+        const pwd = document.getElementById('loginPassword').value;
+
+        const btn = document.getElementById('btnLoginSubmit');
+        const spinner = document.getElementById('loginSpinner');
+        const txt = document.getElementById('loginBtnText');
+
+        btn.disabled = true;
+        spinner.style.display = 'inline-block';
+        txt.textContent = 'Authenticating...';
+
+        const formData = new FormData();
+        formData.append('identifier', ident);
+        formData.append('password', pwd);
+
+        try {
+            const resp = await fetch('api.php?action=login', { method: 'POST', body: formData });
+            const data = await resp.json();
+
+            if (data.success) {
+                showToast(`Welcome back, ${data.user.username}!`, 'success');
+                updateAuthStateUI(data.user);
+                authModalOverlay.classList.remove('active');
+            } else {
+                showToast(data.error || 'Login failed.', 'error');
+            }
+        } catch {
+            showToast('Connection error during login.', 'error');
+        } finally {
+            btn.disabled = false;
+            spinner.style.display = 'none';
+            txt.textContent = 'Sign In';
+        }
+    });
+
+    // Sign Up Submit
+    formSignUp.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const user = document.getElementById('regUsername').value.trim();
+        const email = document.getElementById('regEmail').value.trim();
+        const pwd = document.getElementById('regPassword').value;
+
+        const btn = document.getElementById('btnRegisterSubmit');
+        const spinner = document.getElementById('regSpinner');
+        const txt = document.getElementById('regBtnText');
+
+        btn.disabled = true;
+        spinner.style.display = 'inline-block';
+        txt.textContent = 'Creating Account...';
+
+        const formData = new FormData();
+        formData.append('username', user);
+        formData.append('email', email);
+        formData.append('password', pwd);
+
+        try {
+            const resp = await fetch('api.php?action=register', { method: 'POST', body: formData });
+            const data = await resp.json();
+
+            if (data.success) {
+                showToast(`Account created! Welcome, ${data.user.username}!`, 'success');
+                updateAuthStateUI(data.user);
+                authModalOverlay.classList.remove('active');
+            } else {
+                showToast(data.error || 'Registration failed.', 'error');
+            }
+        } catch {
+            showToast('Connection error during registration.', 'error');
+        } finally {
+            btn.disabled = false;
+            spinner.style.display = 'none';
+            txt.textContent = 'Create Account';
+        }
+    });
 
     // Logout
     if (btnLogout) {
         btnLogout.addEventListener('click', async () => {
             try {
                 await fetch('api.php?action=logout', { method: 'POST' });
-                showToast('Signed out successfully. System locked.', 'info');
-                setUnauthenticatedUI();
-                loadVaultFiles();
-            } catch (err) {
-                showToast(err.message, 'error');
+                showToast('Logged out successfully.', 'info');
+                updateAuthStateUI(null);
+            } catch {
+                updateAuthStateUI(null);
             }
         });
     }
 
-    async function checkAuthStatus() {
-        try {
-            const resp = await fetch('api.php?action=me');
-            const data = await resp.json();
-            if (data.authenticated && data.user) {
-                setAuthenticatedUI(data.user);
-            } else {
-                setUnauthenticatedUI();
-            }
-        } catch (e) {
-            setUnauthenticatedUI();
+    // Password visibility toggle helpers
+    setupTogglePassword('btnToggleLoginPwd', 'loginPassword');
+    setupTogglePassword('btnToggleRegPwd', 'regPassword');
+
+    function setupTogglePassword(btnId, inputId) {
+        const btn = document.getElementById(btnId);
+        const input = document.getElementById(inputId);
+        if (btn && input) {
+            btn.addEventListener('click', () => {
+                input.type = input.type === 'password' ? 'text' : 'password';
+            });
         }
     }
 
-    function setAuthenticatedUI(user) {
-        isAuthenticated = true;
-        if (systemLockBanner) systemLockBanner.style.display = 'none';
-        if (btnOpenAuthModal) btnOpenAuthModal.style.display = 'none';
-        if (userProfileBadge) {
-            userProfileBadge.classList.add('active');
-            if (navUsername) navUsername.textContent = user.username;
-            if (userAvatarText) userAvatarText.textContent = user.username.charAt(0).toUpperCase();
-        }
-    }
-
-    function setUnauthenticatedUI() {
-        isAuthenticated = false;
-        if (systemLockBanner) systemLockBanner.style.display = 'flex';
-        if (btnOpenAuthModal) btnOpenAuthModal.style.display = 'inline-flex';
-        if (userProfileBadge) userProfileBadge.classList.remove('active');
-    }
-
-    // Initial load
+    // Initialize
     checkAuthStatus();
-    loadVaultFiles();
 });
+
+// Toast notification helper
+function showToast(message, type = 'info') {
+    const container = document.getElementById('toastContainer');
+    if (!container) return;
+
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    
+    let icon = 'ℹ️';
+    if (type === 'success') icon = '✅';
+    if (type === 'error') icon = '⚠️';
+
+    toast.innerHTML = `
+        <span style="font-size:1.1rem;">${icon}</span>
+        <div style="flex:1;">${escapeHtml(message)}</div>
+    `;
+
+    container.appendChild(toast);
+
+    setTimeout(() => {
+        toast.style.animation = 'fadeOut 0.3s ease forwards';
+        setTimeout(() => toast.remove(), 300);
+    }, 4000);
+}
+
+function escapeHtml(str) {
+    if (!str) return '';
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+}

@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Secure File Compression | Huffman & AES-256</title>
-    <meta name="description" content="Secure file compression and decompression using Huffman coding and AES-256 encryption.">
+    <title>File Compression System | Huffman Coding</title>
+    <meta name="description" content="Lossless file compression and decompression using Huffman Coding algorithm.">
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -13,7 +13,6 @@
     
     <!-- Stylesheets -->
     <link rel="stylesheet" href="assets/css/style.css">
-    <link rel="stylesheet" href="assets/css/visualizer.css">
 </head>
 <body>
 
@@ -26,7 +25,7 @@
                 </svg>
             </div>
             <div class="brand-text">
-                <h1>SecureCompress <span class="brand-badge">PRO</span></h1>
+                <h1>HuffmanCompress <span class="brand-badge">PRO</span></h1>
             </div>
         </a>
 
@@ -39,13 +38,9 @@
                 <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242M12 21v-9m-4 4 4-4 4 4"/></svg>
                 Decompress
             </button>
-            <button class="tab-btn" data-tab="visualizerTab" id="tabBtnVisualizer">
-                <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="12" cy="5" r="3"/><circle cx="5" cy="19" r="3"/><circle cx="19" cy="19" r="3"/><line x1="12" y1="8" x2="5" y2="16"/><line x1="12" y1="8" x2="19" y2="16"/></svg>
-                Tree Graph
-            </button>
             <button class="tab-btn" data-tab="vaultTab" id="tabBtnVault">
                 <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
-                My Vault
+                My Files
             </button>
             <button class="tab-btn" data-tab="logsTab" id="tabBtnLogs">
                 <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
@@ -87,7 +82,7 @@
                 </div>
                 <div>
                     <h3 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 0.25rem; color: #ffffff;">System Authentication Required</h3>
-                    <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0;">Sign in with the preloaded Demo credentials or register your own account to unlock file compression and secure vault access.</p>
+                    <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0;">Sign in with the demo account or register your own account to compress and manage files.</p>
                 </div>
             </div>
             <div style="display:flex; align-items:center; gap: 0.75rem;">
@@ -101,16 +96,16 @@
         </div>
 
         <!-- ==========================================
-             TAB 1: COMPRESSION & ENCRYPTION
+             TAB 1: COMPRESSION (HUFFMAN)
              ========================================== -->
         <section class="tab-content active" id="compressTab">
             <div class="section-header">
-                <h2>Secure File Compression</h2>
-                <p>Drag, compress, and password-protect your files with Huffman Coding & AES-256 military-grade encryption.</p>
+                <h2>Lossless File Compression</h2>
+                <p>Drag and compress files using the Huffman Coding algorithm with optimal variable-length prefix codes.</p>
             </div>
 
             <div class="grid-compress">
-                <!-- Left: Dropzone & Settings -->
+                <!-- Left: Dropzone & Action -->
                 <div class="glass-card" style="padding: 2rem;">
                     
                     <!-- File Dropzone -->
@@ -121,7 +116,7 @@
                             </svg>
                         </div>
                         <h3 class="dropzone-title">Drop your file here</h3>
-                        <p class="dropzone-sub">Documents, text, pictures, or code files (Max 50MB)</p>
+                        <p class="dropzone-sub">Documents, text, code, or data files (Max 50MB)</p>
                         <span class="browse-btn">Choose File</span>
                         <input type="file" id="fileInputCompress" style="display: none;">
                     </div>
@@ -138,75 +133,17 @@
                         </button>
                     </div>
 
-                    <!-- Algorithm Selection -->
-                    <div class="config-group" style="margin-top: 1.5rem;">
-                        <div class="config-label">
-                            <span>Compression Algorithm</span>
-                        </div>
-                        <div class="algo-selector-grid">
-                            <div class="algo-card selected" data-algo="huffman" id="algoCardHuffman">
-                                <div class="algo-card-header">
-                                    <div class="algo-title">Huffman Coding</div>
-                                    <span class="algo-badge">Visual Tree</span>
-                                </div>
-                                <div class="algo-desc">Frequency-based binary prefix tree.</div>
-                            </div>
-                            <div class="algo-card" data-algo="zip" id="algoCardZip">
-                                <div class="algo-card-header">
-                                    <div class="algo-title">Deflate (ZIP)</div>
-                                    <span class="algo-badge" style="background:rgba(168,85,247,0.15); color:var(--accent-purple); border-color:rgba(168,85,247,0.3);">Standard</span>
-                                </div>
-                                <div class="algo-desc">Dictionary-based fast compression.</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Password Protection Card -->
-                    <div class="config-group">
-                        <div class="security-card">
-                            <div class="security-header">
-                                <div class="security-title-box">
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-                                        <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-                                    </svg>
-                                    <div>
-                                        <div style="font-size:0.95rem; font-weight:600;">Encrypt with AES-256</div>
-                                        <div style="font-size:0.75rem; color:var(--text-dim);">Password protect this file</div>
-                                    </div>
-                                </div>
-                                <label class="switch">
-                                    <input type="checkbox" id="encryptToggle">
-                                    <span class="slider"></span>
-                                </label>
-                            </div>
-
-                            <div class="password-box" id="passwordBox">
-                                <div class="input-field-wrapper">
-                                    <input type="password" id="compressPasswordInput" class="text-input" placeholder="Set a secure password...">
-                                    <button type="button" class="toggle-pwd-btn" id="togglePwdBtn">
-                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                                    </button>
-                                </div>
-                                <div class="strength-meter-bar">
-                                    <div class="strength-fill" id="strengthFill"></div>
-                                </div>
-                                <div class="strength-label">
-                                    <span id="strengthLabel">Strength: Empty</span>
-                                    <span>AES-256-CBC</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <!-- Hidden inputs for compatibility -->
+                    <input type="hidden" id="selectedAlgoInput" value="huffman">
 
                     <!-- Submit -->
-                    <button class="btn-primary" id="btnCompressSubmit" disabled>
+                    <button class="btn-primary" id="btnCompressSubmit" style="margin-top: 1.5rem;" disabled>
                         <div class="spinner" id="compressSpinner"></div>
-                        <span id="compressBtnText">Compress & Save</span>
+                        <span id="compressBtnText">Compress File (Huffman)</span>
                     </button>
                 </div>
 
-                <!-- Right: Visual Feature Card & Results -->
+                <!-- Right: Results & Features -->
                 <div>
                     <!-- Result Card -->
                     <div class="result-card" id="resultCardCompress">
@@ -243,22 +180,30 @@
                         <div class="action-row">
                             <a href="#" class="btn-secondary" id="resDownloadBtn" download>
                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-                                Download File
+                                Download Compressed (.shuf)
                             </a>
-                            <button class="btn-secondary" id="resViewTreeBtn" style="display:none; background:rgba(99,102,241,0.15); border-color:var(--primary);">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="3"/><circle cx="5" cy="19" r="3"/><circle cx="19" cy="19" r="3"/><line x1="12" y1="8" x2="5" y2="16"/><line x1="12" y1="8" x2="19" y2="16"/></svg>
-                                View Tree
-                            </button>
                         </div>
                     </div>
 
-                    <!-- Visual Tech Card -->
-                    <div class="glass-card" style="padding: 1.5rem; text-align: center; overflow: hidden;">
-                        <img src="assets/img/shield_vault.jpg" alt="Security Shield" style="width: 100%; max-height: 220px; object-fit: cover; border-radius: var(--radius-md); margin-bottom: 1rem; border: 1px solid var(--border-subtle);">
-                        <div style="display: flex; justify-content: space-around; font-size: 0.825rem; color: var(--text-muted);">
-                            <div>🔒 <strong>AES-256</strong> Encrypted</div>
-                            <div>⚡ <strong>Huffman</strong> Lossless</div>
-                            <div>🛡️ <strong>SHA-256</strong> Verified</div>
+                    <!-- Clean Algorithm Summary Card -->
+                    <div class="glass-card" style="padding: 1.8rem; text-align: left;">
+                        <h3 style="font-size: 1.05rem; font-weight: 700; margin-bottom: 0.8rem; color: #ffffff;">Huffman Coding Principles</h3>
+                        <p style="font-size: 0.875rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 1.2rem;">
+                            Huffman coding is a greedy, lossless entropy encoding algorithm. Characters with higher frequencies receive shorter binary codewords, while infrequent characters receive longer codewords, achieving optimal prefix compression.
+                        </p>
+                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; font-size: 0.8rem; text-align: center;">
+                            <div style="padding: 0.75rem; background: rgba(255,255,255,0.03); border-radius: 8px; border: 1px solid var(--border-subtle);">
+                                <div style="font-size: 1.1rem; margin-bottom: 0.25rem;">⚡</div>
+                                <strong style="color: #fff;">Lossless</strong>
+                            </div>
+                            <div style="padding: 0.75rem; background: rgba(255,255,255,0.03); border-radius: 8px; border: 1px solid var(--border-subtle);">
+                                <div style="font-size: 1.1rem; margin-bottom: 0.25rem;">🌳</div>
+                                <strong style="color: #fff;">Min-Heap Tree</strong>
+                            </div>
+                            <div style="padding: 0.75rem; background: rgba(255,255,255,0.03); border-radius: 8px; border: 1px solid var(--border-subtle);">
+                                <div style="font-size: 1.1rem; margin-bottom: 0.25rem;">🛡️</div>
+                                <strong style="color: #fff;">SHA-256 Check</strong>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -271,7 +216,7 @@
         <section class="tab-content" id="decompressTab">
             <div class="section-header">
                 <h2>Decompress & Restore</h2>
-                <p>Upload your <code>.shuf</code> or <code>.szip</code> file to unlock and restore the original file.</p>
+                <p>Upload your <code>.shuf</code> file to rebuild the Huffman tree and restore the original file.</p>
             </div>
 
             <div style="max-width: 620px; margin: 0 auto;">
@@ -283,7 +228,7 @@
                             </svg>
                         </div>
                         <h3 class="dropzone-title">Upload Compressed Archive</h3>
-                        <p class="dropzone-sub">Drop <code>.shuf</code> or <code>.szip</code> here</p>
+                        <p class="dropzone-sub">Drop <code>.shuf</code> file here</p>
                         <span class="browse-btn">Select File</span>
                         <input type="file" id="fileInputDecompress" style="display: none;">
                     </div>
@@ -299,16 +244,9 @@
                         </button>
                     </div>
 
-                    <div class="config-group" id="decompressPasswordGroup" style="margin-top: 1.5rem; display:none;">
-                        <label class="config-label">
-                            <span>Password (Required for AES-256)</span>
-                        </label>
-                        <input type="password" id="decompressPasswordInput" class="text-input" placeholder="Enter password to unlock...">
-                    </div>
-
                     <button class="btn-primary" id="btnDecompressSubmit" style="margin-top: 1.5rem;" disabled>
                         <div class="spinner" id="decompressSpinner"></div>
-                        <span id="decompressBtnText">Decompress & Restore</span>
+                        <span id="decompressBtnText">Decompress & Restore File</span>
                     </button>
 
                     <!-- Result -->
@@ -351,116 +289,29 @@
         </section>
 
         <!-- ==========================================
-             TAB 3: HUFFMAN TREE VISUALIZER
-             ========================================== -->
-        <section class="tab-content" id="visualizerTab">
-            <div class="section-header">
-                <h2>Huffman Binary Tree Visualizer</h2>
-                <p>Visual representation of character frequencies and prefix tree paths.</p>
-            </div>
-
-            <div class="visualizer-wrapper">
-                <div class="glass-card tree-card-container">
-                    <div class="tree-controls">
-                        <div class="tree-title-group">
-                            <h3>Binary Prefix Graph</h3>
-                            <span style="font-size:0.75rem; color:var(--text-dim);">Green = Characters | Blue = Frequency sum nodes</span>
-                        </div>
-                        <div class="tree-btn-group">
-                            <button class="ctrl-btn" id="btnZoomIn">+ Zoom In</button>
-                            <button class="ctrl-btn" id="btnZoomOut">- Zoom Out</button>
-                            <button class="ctrl-btn" id="btnResetZoom">Reset</button>
-                        </div>
-                    </div>
-
-                    <div class="svg-canvas-container" id="svgCanvasContainer">
-                        <!-- Populated by JavaScript -->
-                    </div>
-                </div>
-
-                <div class="codebook-grid">
-                    <div class="glass-card table-card">
-                        <div class="table-header-box">
-                            <h3 style="font-size: 1.05rem; font-weight:600;">Codebook Dictionary</h3>
-                        </div>
-                        <div class="table-responsive">
-                            <table class="custom-table" id="codebookTable">
-                                <thead>
-                                    <tr>
-                                        <th>Char</th>
-                                        <th>ASCII</th>
-                                        <th>Count</th>
-                                        <th>Prob.</th>
-                                        <th>Binary Code</th>
-                                        <th>Bits</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="codebookTableBody">
-                                    <tr><td colspan="6" style="text-align:center; padding:2rem; color:var(--text-dim);">Compress a file using Huffman Coding to see its codebook.</td></tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <div class="glass-card theory-card">
-                        <h3 style="font-size: 1.05rem; font-weight:600;">Compression Metrics</h3>
-                        
-                        <div class="metric-bar-group">
-                            <div>
-                                <div class="metric-row-header">
-                                    <span style="color:var(--text-muted);">Shannon Entropy:</span>
-                                    <strong id="entropyVal" style="color:var(--accent-cyan); font-family:var(--font-mono);">0.00 bits/symbol</strong>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="metric-row-header">
-                                    <span style="color:var(--text-muted);">Average Code Length:</span>
-                                    <strong id="avgCodeLenVal" style="color:var(--primary-light); font-family:var(--font-mono);">0.00 bits/symbol</strong>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="metric-row-header">
-                                    <span style="color:var(--text-muted);">Efficiency (&eta;):</span>
-                                    <strong id="efficiencyVal" style="color:var(--accent-emerald); font-family:var(--font-mono);">0%</strong>
-                                </div>
-                                <div class="metric-track">
-                                    <div class="metric-progress" id="efficiencyProgressBar" style="width: 0%;"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- ==========================================
-             TAB 4: FILE VAULT
+             TAB 3: MY FILES
              ========================================== -->
         <section class="tab-content" id="vaultTab">
             <div class="section-header">
-                <h2>Saved Archives Vault</h2>
-                <p>Browse, download, or decompress your saved files.</p>
+                <h2>My Compressed Files</h2>
+                <p>Browse, download, or decompress your saved Huffman archives.</p>
             </div>
 
             <div class="glass-card table-card">
-                <div class="vault-header">
-                    <h3 style="font-size: 1.1rem; font-weight:600;">My Archives</h3>
-                </div>
                 <div class="table-responsive">
                     <table class="custom-table" id="vaultTable">
                         <thead>
                             <tr>
                                 <th>Filename</th>
                                 <th>Algorithm</th>
-                                <th>Security</th>
-                                <th>Original</th>
-                                <th>Compressed</th>
-                                <th>Saved</th>
+                                <th>Original Size</th>
+                                <th>Compressed Size</th>
+                                <th>Ratio</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody id="vaultTableBody">
-                            <tr><td colspan="7" style="text-align:center; padding:2rem; color:var(--text-dim);">Loading vault...</td></tr>
+                            <tr><td colspan="6" style="text-align:center; padding:2rem; color:var(--text-dim);">Loading files...</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -468,12 +319,12 @@
         </section>
 
         <!-- ==========================================
-             TAB 5: ACTIVITY LOGS
+             TAB 4: ACTIVITY LOGS
              ========================================== -->
         <section class="tab-content" id="logsTab">
             <div class="section-header">
                 <h2>Activity Log</h2>
-                <p>Audit trail of compression, decompression, and account logins.</p>
+                <p>Audit trail of compression and decompression sessions.</p>
             </div>
 
             <div class="glass-card table-card">
@@ -483,7 +334,7 @@
                             <tr>
                                 <th>Date/Time</th>
                                 <th>Action</th>
-                                <th>Target</th>
+                                <th>Target File</th>
                                 <th>Status</th>
                                 <th>IP</th>
                                 <th>Notes</th>
@@ -501,7 +352,7 @@
 
     <!-- Footer -->
     <footer class="footer">
-        <div>&copy; 2026 Secure File Compression System</div>
+        <div>&copy; 2026 File Compression System (Huffman Coding)</div>
         <div class="footer-links">
             <span id="footerDbName" style="color: var(--accent-cyan); font-family: var(--font-mono);">Database Connected</span>
         </div>
@@ -513,13 +364,13 @@
     <div class="modal-overlay" id="authModalOverlay">
         <div class="auth-modal-dialog">
             
-            <!-- Left Side: 3D Visual Asset & Headline -->
+            <!-- Left Side: Visual Asset & Headline -->
             <div class="auth-banner-side">
-                <img src="assets/img/shield_vault.jpg" alt="Vault Graphic" class="auth-banner-img">
+                <img src="assets/img/shield_vault.jpg" alt="File Vault" class="auth-banner-img">
                 <div class="auth-banner-overlay"></div>
                 <div class="auth-banner-content">
-                    <div class="auth-banner-title">Secure File Vault</div>
-                    <div class="auth-banner-sub">Protect and compress your confidential files with Huffman coding and AES-256 encryption.</div>
+                    <div class="auth-banner-title">File Compression</div>
+                    <div class="auth-banner-sub">Lossless file compression and restoration using Huffman prefix coding.</div>
                 </div>
             </div>
 
@@ -600,7 +451,6 @@
 
     <!-- Scripts -->
     <script src="assets/js/crypto-utils.js"></script>
-    <script src="assets/js/visualizer.js"></script>
     <script src="assets/js/app.js"></script>
 </body>
 </html>

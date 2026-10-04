@@ -1,0 +1,197 @@
+\documentclass[aspectratio=169,11pt]{beamer}
+
+\usetheme{Madrid}
+\usecolortheme{beaver}
+
+% Custom Colors
+\definecolor{primaryblue}{RGB}{24, 76, 120}
+\definecolor{accentteal}{RGB}{20, 110, 120}
+\definecolor{darkslate}{RGB}{35, 45, 55}
+
+\setbeamercolor{palette primary}{bg=primaryblue,fg=white}
+\setbeamercolor{palette secondary}{bg=accentteal,fg=white}
+\setbeamercolor{palette tertiary}{bg=darkslate,fg=white}
+\setbeamercolor{titlelike}{parent=palette primary,fg=primaryblue}
+\setbeamercolor{structure}{fg=primaryblue}
+\setbeamercolor{block title}{bg=primaryblue!15,fg=primaryblue}
+\setbeamercolor{block body}{bg=gray!8,fg=black}
+
+\setbeamertemplate{navigation symbols}{}
+
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric,arrows.meta,positioning}
+
+\title[File Compression System]{\textbf{File Compression System Using Huffman Coding}}
+\subtitle{Project Proposal Defense Presentation}
+\author{\textbf{Aarti Kushwaha}}
+\institute[B.Tech]{Bachelor of Technology\\Department of Computer Science \& Engineering}
+\date{Academic Session 2025--2026}
+
+\begin{document}
+
+% -----------------------------------------------------------------------------
+% SLIDE 1: TITLE SLIDE
+% -----------------------------------------------------------------------------
+\begin{frame}
+    \titlepage
+\end{frame}
+
+% -----------------------------------------------------------------------------
+% SLIDE 2: INTRODUCTION & BACKGROUND
+% -----------------------------------------------------------------------------
+\begin{frame}{1. Introduction \& Background Study}
+    \begin{block}{What is Data Compression?}
+        \begin{itemize}
+            \item Process of reducing physical storage footprint and transmission bandwidth of digital files.
+            \item \textbf{Lossless Compression}: Guarantees 100\% exact bit-for-bit reconstruction of original data without distortion or data loss.
+        \end{itemize}
+    \end{block}
+    
+    \vspace{0.3cm}
+    \begin{block}{Theoretical Foundation}
+        \begin{itemize}
+            \item \textbf{Shannon Entropy (1948)}: Theoretical minimum limit for average bits per symbol:
+            $$H(X) = - \sum_{i=1}^n P(x_i) \log_2 P(x_i)$$
+            \item \textbf{Huffman Algorithm (1952)}: Greedy prefix-coding algorithm that assigns shorter codes to frequent symbols, achieving optimal prefix compression.
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+% -----------------------------------------------------------------------------
+% SLIDE 3: PROBLEM STATEMENT & OBJECTIVES
+% -----------------------------------------------------------------------------
+\begin{frame}{2. Problem Statement \& Objectives}
+    \begin{columns}[T]
+        \begin{column}{0.48\textwidth}
+            \begin{block}{Problem Statement}
+                \begin{itemize}
+                    \item Growing volumes of digital text and binary records strain storage and network bandwidth.
+                    \item Existing industrial utilities are complex, proprietary, or act as closed ``black-box'' programs.
+                    \item Need for a transparent, efficient, self-contained implementation of Huffman entropy coding.
+                \end{itemize}
+            \end{block}
+        \end{column}
+        
+        \begin{column}{0.48\textwidth}
+            \begin{block}{Key Project Objectives}
+                \begin{enumerate}
+                    \item Develop pure lossless Huffman compression and decompression engine.
+                    \item Build min-heap priority queue for optimal prefix tree construction.
+                    \item Implement sequential bit-level bitstream packing.
+                    \item Guarantee data integrity via pre/post SHA-256 hash checks.
+                    \item Deliver an intuitive web-based interface for user interaction.
+                \end{enumerate}
+            \end{block}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% -----------------------------------------------------------------------------
+% SLIDE 4: LITERATURE REVIEW & EXISTING SYSTEM
+% -----------------------------------------------------------------------------
+\begin{frame}{3. Literature Review \& Existing System Analysis}
+    \begin{block}{Literature Benchmark}
+        \begin{itemize}
+            \item \textbf{C. E. Shannon (1948)}: Proved limits on lossless data compression and statistical redundancy.
+            \item \textbf{D. A. Huffman (1952)}: Established bottom-up greedy binary tree synthesis for minimum-redundancy prefix codes.
+            \item \textbf{D. E. Knuth (1985)}: Researched efficient data structures for tree construction and bitstream serialization.
+        \end{itemize}
+    \end{block}
+    
+    \vspace{0.15cm}
+    \begin{block}{Comparison: Existing vs. Proposed System}
+        \centering
+        \footnotesize
+        \begin{tabular}{lcc}
+            \toprule
+            \textbf{Feature} & \textbf{Traditional Utilities} & \textbf{Proposed System} \\
+            \midrule
+            Complexity & Multi-layer / Proprietary & Clean Huffman Model \\
+            Transparency & Opaque Black-Box & Clear Step-by-Step Execution \\
+            Lossless Integrity & Standard & Cryptographically Verified (SHA-256) \\
+            User Accessibility & CLI / Heavy Desktop App & Lightweight Web Dashboard \\
+            \bottomrule
+        \end{tabular}
+    \end{block}
+\end{frame}
+
+% -----------------------------------------------------------------------------
+% SLIDE 5: METHODOLOGY & ALGORITHM
+% -----------------------------------------------------------------------------
+\begin{frame}{4. Methodology \& Working Mechanism}
+    \begin{block}{Five Steps of Huffman Compression}
+        \begin{enumerate}
+            \item \textbf{Frequency Profiling}: Count occurrences of all 256 byte values ($0\text{x}00$ to $0\text{xFF}$).
+            \item \textbf{Min-Heap Initialization}: Insert character nodes ordered by frequency.
+            \item \textbf{Tree Construction}: Repeatedly merge lowest two nodes until one root remains.
+            \item \textbf{Code Assignment}: Left branch = `0', Right branch = `1'; extract variable-length bitstrings.
+            \item \textbf{Bitstream Packing}: Pack bit sequences into 8-bit bytes with header frequency metadata.
+        \end{enumerate}
+    \end{block}
+
+    \vspace{0.2cm}
+    \begin{block}{Decompression Workflow}
+        \begin{itemize}
+            \item Read frequency table $\rightarrow$ Reconstruct exact binary tree $\rightarrow$ Traverse bits from root to leaf $\rightarrow$ Output original bytes $\rightarrow$ Verify SHA-256 checksum.
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+% -----------------------------------------------------------------------------
+% SLIDE 6: GANTT CHART (4-MONTH PROJECT TIMELINE)
+% -----------------------------------------------------------------------------
+\begin{frame}{5. Project Timeline (4-Month Gantt Chart)}
+    \begin{block}{Implementation Schedule}
+        \centering
+        \small
+        \begin{tabularx}{\textwidth}{lcccc}
+            \toprule
+            \textbf{Project Phase / Milestone} & \textbf{Month 1} & \textbf{Month 2} & \textbf{Month 3} & \textbf{Month 4} \\
+            \midrule
+            Requirement Gathering \& Literature Review & \textbf{[XXXX]} & & & \\
+            Feasibility Study \& System Architecture & \textbf{[XXXX]} & & & \\
+            Huffman Min-Heap Engine Implementation & & \textbf{[XXXX]} & & \\
+            Bit Packing \& Serialization Module & & \textbf{[XXXX]} & & \\
+            Web Application Interface \& Ingestion API & & & \textbf{[XXXX]} & \\
+            Session Management \& File History & & & \textbf{[XXXX]} & \\
+            Testing, Lossless Verification \& Benchmarking & & & & \textbf{[XXXX]} \\
+            Final Documentation, Presentation \& Defense & & & & \textbf{[XXXX]} \\
+            \bottomrule
+        \end{tabularx}
+    \end{block}
+
+    \vspace{0.3cm}
+    \begin{columns}[T]
+        \begin{column}{0.5\textwidth}
+            \textbf{Software Requirements:} PHP 8.2+, SQLite/MySQL, Modern Browser.
+        \end{column}
+        \begin{column}{0.5\textwidth}
+            \textbf{Hardware Requirements:} 2.0+ GHz CPU, 4 GB RAM, 500 MB Storage.
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% -----------------------------------------------------------------------------
+% SLIDE 7: EXPECTED OUTCOMES & CONCLUSION
+% -----------------------------------------------------------------------------
+\begin{frame}{6. Expected Outcomes \& Conclusion}
+    \begin{block}{Expected Outcomes}
+        \begin{itemize}
+            \item Functional, high-performance Huffman compression and decompression tool.
+            \item 20\% to 60\% space savings on uncompressed text, logs, and source code.
+            \item 100\% verified lossless reconstruction with zero byte discrepancy.
+            \item Simple, intuitive web interface accessible from any browser.
+        \end{itemize}
+    \end{block}
+
+    \vspace{0.3cm}
+    \begin{center}
+        {\Large \textbf{Thank You!}}\\[0.3cm]
+        {\large \textbf{Questions \& Answers}}\\[0.2cm]
+        \textit{Candidate: Aarti Kushwaha \quad | \quad Academic Session 2025--2026}
+    \end{center}
+\end{frame}
+
+\end{document}

@@ -1,37 +1,59 @@
 \documentclass[12pt,a4paper]{report}
 
 \usepackage[utf8]{inputenc}
-\usepackage[margin=1in]{geometry}
+\usepackage[a4paper, top=1in, bottom=1in, right=1in, left=1.25in]{geometry}
+\usepackage{mathptmx} % Times New Roman font equivalent
+\usepackage{setspace}
+\setstretch{1.5} % 1.5 line spacing as required
 \usepackage{amsmath,amssymb}
 \usepackage{graphicx}
-\usepackage{hyperref}
 \usepackage{booktabs}
 \usepackage{tabularx}
 \usepackage{titlesec}
 \usepackage{fancyhdr}
+\usepackage[font={bf,normalsize},labelfont=bf,justification=centering]{caption}
+\usepackage{hyperref}
 \usepackage{tikz}
-\usetikzlibrary{shapes.geometric,arrows.meta,positioning,fit,calc,trees,backgrounds,decorations.pathreplacing}
+\usetikzlibrary{shapes.geometric,arrows.meta,positioning,calc}
+
+% Justified text alignment
+\hyphenpenalty=1000
+\tolerance=2000
+\emergencystretch=10pt
+
+% Header and Footer Styling (Page number at bottom center)
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% Section Headings Styling according to university standards:
+% Chapter / Main Title: 16pt Bold
+% Section Heading: 14pt Bold
+% Sub-section Heading: 12pt Bold
+\titleformat{\chapter}[display]
+  {\normalfont\fontsize{16}{20}\bfseries\centering}{\chaptertitlename\ \thechapter}{10pt}{\fontsize{16}{20}\bfseries}
+\titlespacing*{\chapter}{0pt}{-10pt}{20pt}
+
+\titleformat{\section}
+  {\normalfont\fontsize{14}{18}\bfseries}{\thesection}{1em}{}
+\titlespacing*{\section}{0pt}{14pt}{6pt}
+
+\titleformat{\subsection}
+  {\normalfont\fontsize{12}{15}\bfseries}{\thesubsection}{1em}{}
+\titlespacing*{\subsection}{0pt}{10pt}{4pt}
+
+\titleformat{\subsubsection}
+  {\normalfont\fontsize{12}{15}\bfseries}{\thesubsubsection}{1em}{}
+\titlespacing*{\subsubsection}{0pt}{8pt}{3pt}
 
 \hypersetup{
     colorlinks=true,
-    linkcolor=blue!80!black,
-    citecolor=blue!80!black,
-    urlcolor=cyan!70!black
+    linkcolor=black,
+    citecolor=black,
+    urlcolor=blue
 }
-
-% Header and Footer Styling
-\pagestyle{fancy}
-\fancyhf{}
-\fancyhead[L]{\small \nouppercase{\leftmark}}
-\fancyhead[R]{\small Secure File Compression System}
-\fancyfoot[C]{\thepage}
-\renewcommand{\headrulewidth}{0.4pt}
-\renewcommand{\footrulewidth}{0.4pt}
-
-% Title formats
-\titleformat{\chapter}[display]
-  {\normalfont\huge\bfseries\centering}{\chaptertitlename\ \thechapter}{15pt}{\Huge}
-\titlespacing*{\chapter}{0pt}{-20pt}{25pt}
 
 \begin{document}
 
@@ -42,600 +64,286 @@
     \centering
     \vspace*{0.5cm}
     
-    {\Huge \textbf{PROJECT REPORT}}\\[0.6cm]
-    {\LARGE \textbf{ON}}\\[0.8cm]
-    {\LARGE \textbf{SECURE FILE COMPRESSION SYSTEM}\par}\vspace{0.5cm}
-    {\large \textit{A Clean Architecture Implementation of Huffman Entropy Coding with AES-256 Authenticated Encryption}}\\[1.8cm]
+    {\fontsize{16}{22}\bfseries A PROJECT PROPOSAL\par}
+    \vspace{0.6cm}
+    {\fontsize{14}{18}\bfseries ON\par}
+    \vspace{0.6cm}
+    {\fontsize{16}{22}\bfseries FILE COMPRESSION SYSTEM USING HUFFMAN CODING\par}
+    \vspace{2.0cm}
     
-    \textbf{A Project Submitted in Partial Fulfillment of the Requirements for the Degree of}\\[0.3cm]
-    {\large \textbf{Bachelor of Technology}}\\[2.2cm]
+    {\fontsize{12}{16}\selectfont A Project Proposal Submitted in Partial Fulfillment of the\\
+    Requirements for the Degree of Bachelor of Technology\par}
+    \vspace{3.0cm}
     
     \begin{minipage}{0.45\textwidth}
-        \begin{flushleft} \large
-            \textbf{Submitted By:}\\[0.2cm]
-            \textbf{Aarti Kushwaha}
+        \begin{flushleft}
+            {\fontsize{12}{15}\bfseries Submitted By:}\\[0.3cm]
+            {\fontsize{12}{15}\bfseries Aarti Kushwaha}
         \end{flushleft}
     \end{minipage}
     \hfill
     \begin{minipage}{0.45\textwidth}
-        \begin{flushright} \large
-            \textbf{Under the Guidance of:}\\[0.2cm]
-            \textbf{Project Supervisor}
+        \begin{flushright}
+            {\fontsize{12}{15}\bfseries Under the Guidance of:}\\[0.3cm]
+            {\fontsize{12}{15}\bfseries Project Supervisor}
         \end{flushright}
     \end{minipage}
     
     \vfill
-    {\large \textbf{Academic Session 2025--2026}}
+    {\fontsize{12}{15}\bfseries Academic Session 2025--2026\par}
 \end{titlepage}
 
 % ==============================================================================
-% CERTIFICATE & DECLARATION
+% PRELIMINARY PAGES (ROMAN NUMERALS)
 % ==============================================================================
-\chapter*{Certificate of Approval}
-\thispagestyle{plain}
-This is to certify that the project entitled \textbf{``Secure File Compression System''} submitted by \textbf{Aarti Kushwaha} in partial fulfillment of the requirements for the award of Bachelor of Technology is an authentic record of project work carried out under guidance and supervision. The results embodied in this report have been verified and found satisfactory.
+\pagenumbering{roman}
+\setcounter{page}{1}
 
-\vspace{2.5cm}
+% Certificate / Approval Page
+\chapter*{Certificate of Approval}
+\thispagestyle{fancy}
+
+This is to certify that the project proposal entitled \textbf{``File Compression System Using Huffman Coding''} submitted by \textbf{Aarti Kushwaha} in partial fulfillment of the requirements for the award of the Degree of Bachelor of Technology has been examined and approved as an authentic proposal work carried out under supervision.
+
+\vspace{3.0cm}
 \noindent
 \begin{minipage}{0.45\textwidth}
     \hrulefill\\
+    \centering
     \textbf{Project Supervisor}
 \end{minipage}
 \hfill
 \begin{minipage}{0.45\textwidth}
     \hrulefill\\
-    \textbf{External / Internal Examiner}
+    \centering
+    \textbf{Internal / External Examiner}
 \end{minipage}
-
-\newpage
-
-% ==============================================================================
-% ABSTRACT
-% ==============================================================================
-\chapter*{Abstract}
-\thispagestyle{plain}
-In the modern digital era, the massive expansion of unstructured multimedia and binary data presents two paramount engineering challenges: storage bandwidth consumption and information confidentiality. Conventional compression utilities often function as opaque ``black-box'' programs and frequently divorce data reduction from cryptographic authentication. 
-
-This project presents the engineering and implementation of a \textbf{Secure File Compression System} built strictly upon \textbf{Clean Architecture} principles. The system implements a dual-engine architecture featuring lossless \textbf{Huffman Variable-Length Coding} alongside standard \textbf{DEFLATE (RFC 1951 / ZIP Level 9)} compression. The core Huffman engine analyzes byte-frequency distributions, constructs an optimal binary prefix tree via a min-heap priority queue, and packs variable-length codewords into a bitstream with a self-contained header dictionary that guarantees 100\% lossless reconstruction.
-
-To address security, the system incorporates military-grade \textbf{AES-256-CBC} encryption with \textbf{PBKDF2} key derivation (15,000 iterations) and an \textbf{Encrypt-then-MAC (HMAC-SHA256)} authentication paradigm, guarding against chosen-ciphertext and bit-flipping tampering. The system includes an interactive graphical user interface featuring live SVG-rendered Huffman prefix trees, real-time Shannon Entropy calculations, an encrypted vault repository, and a multi-user authentication system backed by bcrypt password hashing. A dual-database persistence layer seamlessly operates on MySQL 8.0 with automatic zero-configuration SQLite fallback.
 
 \newpage
 \tableofcontents
 \newpage
-\listoffigures
-\newpage
-\listoftables
-\newpage
 
 % ==============================================================================
-% CHAPTER 1: INTRODUCTION
+% CHAPTER 1: PROJECT PROPOSAL BODY (NUMERIC PAGE NUMBERING FROM 1)
 % ==============================================================================
+\pagenumbering{arabic}
+\setcounter{page}{1}
+
 \chapter{Introduction}
 
-\section{Purpose}
-The purpose of the \textbf{Secure File Compression System} is to deliver a transparent, high-performance, and cryptographically verified software application for reducing file storage footprints while guaranteeing absolute data confidentiality. 
+\section{Introduction}
+In modern computing environments, the rapid expansion of digital information has made efficient data transmission and compact storage critical necessities. Data compression algorithms minimize the physical space required to store information while conserving transmission bandwidth across communications networks.
 
-Historically, data compression and cryptographic security were managed as disparate tasks: users compressed archives using generic utilities, then manually encrypted them using third-party cryptographic software. This fractured process frequently led to vulnerabilities, such as insecure temporary files, leaked metadata, and vulnerability to padding oracle attacks.
+Compression methods are fundamentally categorized into lossy and lossless algorithms. While lossy compression achieves higher compression ratios by discarding perceptual redundancies (such as in audio or photographic formats), lossless compression reconstructs original binary data exactly, bit-for-bit. For text documents, source code, database dumps, and application binaries, lossless compression is strictly mandatory.
 
-The \textbf{Secure File Compression System} solves these issues by unifying entropy-based data reduction (Huffman Coding), dictionary compression (DEFLATE), and authenticated encryption (AES-256 with HMAC-SHA256) inside a unified, decoupled Clean Architecture. Furthermore, the system provides visual insight into compression theory by dynamically calculating Shannon Entropy and rendering the internal binary prefix tree graph.
+This project focuses on the study, design, and implementation of a \textbf{File Compression System} using the classical \textbf{Huffman Coding algorithm}. The application enables users to compress and decompress arbitrary files efficiently through an interactive web-based graphical interface with complete lossless integrity.
+
+\section{Background Study}
+The theoretical foundation of lossless compression originated in Claude Shannon's landmark 1948 paper, \textit{``A Mathematical Theory of Communication''}, which defined the concept of Shannon Entropy as the fundamental lower bound on the average number of bits required to encode symbol alphabets. 
+
+In 1952, David A. Huffman developed an optimal greedy method for constructing variable-length prefix-free codes based on known symbol occurrence frequencies. Huffman coding establishes an optimal prefix property: no assigned code string is a prefix of any other code string, allowing continuous and unambiguous sequential decoding without special delimiters. 
+
+In conventional computing environments, proprietary or complex compression utilities often mask the underlying algorithmic mechanisms. This proposal aims to provide an accessible, self-contained implementation that bridges theoretical information theory with practical software engineering.
 
 \section{Scope}
 The scope of this project encompasses:
 \begin{enumerate}
-    \item \textbf{Lossless Entropy Encoding:} Autonomous Huffman coding capable of processing arbitrary text, source code, documents, and binaries without external dictionary dependencies.
-    \item \textbf{Dual Compression Modes:} Real-time comparison between Huffman variable-length encoding and RFC 1951 DEFLATE (ZIP Level 9) compression.
-    \item \textbf{Military-Grade Cryptography:} AES-256-CBC authenticated encryption, PBKDF2 (15,000 iterations) key derivation, and HMAC-SHA256 integrity verification.
-    \item \textbf{Interactive Educational Visualization:} Interactive SVG rendering of the generated binary prefix tree with bit-branch paths ($0$ and $1$), accompanied by a codebook dictionary and Shannon Entropy metrics.
-    \item \textbf{Multi-User Vault \& Access Control:} User authentication with bcrypt password hashing (cost factor 12), user-specific archive vaults, and tamper-resistant activity audit logging.
-    \item \textbf{Dual Storage \& Persistence:} Production-grade MySQL relational database persistence with zero-configuration SQLite fallback for immediate local deployment.
+    \item Development of an automated byte-frequency counter and min-heap binary tree generator in software.
+    \item Generation of variable-length prefix codes and bit-level bitstream packing for arbitrary file formats.
+    \item Embedding self-contained header metadata containing serialized tree structures to permit independent decompression.
+    \item Lossless decompression engine to restore encoded files byte-for-byte with SHA-256 verification.
+    \item A clean, responsive user interface allowing drag-and-drop file upload, compression tracking, and history management.
 \end{enumerate}
 
-\section{Problem in Existing System}
-Traditional compression tools and contemporary academic utilities exhibit several notable deficiencies:
-\begin{itemize}
-    \item \textbf{Black-Box Obscurity:} Most commercial tools (e.g., WinRAR, 7-Zip) execute compression as an opaque background routine, offering no feedback on symbol probability distribution, entropy limits, or tree construction.
-    \item \textbf{Unauthenticated Encryption:} Many traditional archive tools use unauthenticated encryption modes (such as standard ZipCrypto or basic AES-CTR), making archives susceptible to bit-flipping attacks and ciphertext alteration.
-    \item \textbf{Monolithic Code Tight-Coupling:} Academic software implementations often combine UI rendering, file reading, compression algorithms, and database queries in single unstructured scripts, violating SOLID principles.
-    \item \textbf{Rigid Database Dependencies:} Systems that strictly require manual MySQL service configuration fail immediately in portable demonstration environments.
-\end{itemize}
-
-The proposed system addresses each of these limitations through clean layered software engineering.
+\section{Limitations}
+The system operates under the following identified limitations:
+\begin{enumerate}
+    \item \textbf{Pre-compressed File Limitations}: Files that already exhibit high Shannon entropy (such as JPEG images, MP4 videos, or previously compressed ZIP files) cannot be substantially compressed further and may slightly expand due to the overhead of the frequency dictionary header.
+    \item \textbf{Static Huffman Tree Overhead}: For very small input files (e.g., files under 100 bytes), the storage cost of transmitting the codebook frequency table in the header can exceed the space saved from bit-level compaction.
+    \item \textbf{Single-Node Execution}: Initial implementation is targeted for standalone desktop and local web server execution rather than distributed cloud clusters.
+\end{enumerate}
 
 % ==============================================================================
-% CHAPTER 2: SYSTEM REQUIREMENT ANALYSIS
+% CHAPTER 2: PROBLEM STATEMENT & OBJECTIVES
 % ==============================================================================
-\chapter{System Requirement Analysis}
+\chapter{Problem Statement \& Objectives}
 
-\section{Information Gathering}
-Information gathering for this project was conducted through:
+\section{Problem Statement}
+Every day, computer users and organizations handle vast volumes of documents, log files, configuration data, and scripts. Storing and transmitting these files in raw uncompressed formats consumes excessive hard drive space and overburdens limited network bandwidth.
+
+Existing industrial compression software tools are frequently closed-source, bundle complex external proprietary dependencies, or function as opaque black boxes that do not expose the internal mechanics of entropy reduction. Furthermore, many educational environments lack simple, transparent, and reproducible platforms for demonstrating variable-length entropy coding directly on actual user files.
+
+Therefore, there is an evident need for an efficient, transparent, and robust File Compression System centered on the Huffman Coding algorithm, capable of providing verified lossless file reconstruction through an accessible interface.
+
+\section{Objectives}
+The primary objectives of the proposed project are as follows:
+\begin{enumerate}
+    \item \textbf{Lossless Compression}: To develop a fully functional Huffman compression engine capable of compressing arbitrary file formats without losing a single byte of data.
+    \item \textbf{Accurate Decompression}: To implement an inverse tree-traversal decompression engine that reads bitstreams and perfectly reconstructs original files.
+    \item \textbf{Optimal Prefix Encoding}: To utilize a min-heap priority queue for constructing prefix-free binary codes with optimal average codeword length.
+    \item \textbf{Integrity Verification}: To compute and verify cryptographic SHA-256 checksums before compression and after decompression to ensure total data fidelity.
+    \item \textbf{User-Friendly Interface}: To provide an intuitive web-based interface for drag-and-drop file processing, download management, and session activity tracking.
+\end{enumerate}
+
+% ==============================================================================
+% CHAPTER 3: METHODOLOGY & SYSTEM DESIGN
+% ==============================================================================
+\chapter{Methodology}
+
+\section{Requirement Identification}
+
+\subsection{Study of Existing System}
+An analysis of existing compression utilities reveals that while standard general-purpose utilities (such as gzip, 7-Zip, or WinRAR) achieve high compression ratios, they combine multi-stage algorithms (such as LZ77 dictionary matching with sliding windows followed by dynamic Huffman trees). This multi-stage pipeline makes debugging and educational comprehension complex. A pure, robust implementation of canonical Huffman coding allows direct analysis of symbol probability distribution and prefix code generation without unnecessary complexity.
+
+\subsection{Literature Review}
+\begin{enumerate}
+    \item \textbf{Shannon (1948)}: Formulated the mathematical foundation of communication and proved that the entropy $H(X) = -\sum P(x_i) \log_2 P(x_i)$ represents the absolute theoretical limit for lossless data compaction.
+    \item \textbf{Huffman (1952)}: Published \textit{``A Method for the Construction of Minimum-Redundancy Codes''}, introducing the bottom-up tree generation algorithm using priority queues that guarantees optimal prefix codes for given character probabilities in $O(n \log n)$ time.
+    \item \textbf{Knuth (1985)}: Explored dynamic and static Huffman data structures, demonstrating memory-efficient bit-packing techniques and sequential binary tree traversal mechanisms for digital computers.
+\end{enumerate}
+
+\subsection{Requirement Analysis}
+\subsubsection{Functional Requirements}
 \begin{itemize}
-    \item \textbf{Algorithmic Research:} Study of David Huffman's foundational 1952 paper, \textit{``A Method for the Construction of Minimum-Redundancy Codes''}, and Claude Shannon's 1948 mathematical treatise, \textit{``A Mathematical Theory of Communication''}.
-    \item \textbf{Cryptographic Standards Analysis:} Review of NIST Special Publication 800-38A (Block Cipher Modes of Operation) and RFC 2898 (PKCS \#5: Password-Based Cryptography Specification).
-    \item \textbf{Architectural Review:} Analysis of Robert C. Martin's \textit{Clean Architecture} paradigms regarding boundary enforcement, Dependency Inversion, and entity isolation.
+    \item The system shall read input files in binary stream mode to support both ASCII text and arbitrary binary data.
+    \item The system shall construct byte-frequency tables across 256 possible byte values ($0\text{x}00$ to $0\text{xFF}$).
+    \item The system shall build an optimal binary tree using a priority queue.
+    \item The system shall generate variable-length bit codewords and write packed bitstreams.
+    \item The system shall include self-contained decoding headers in compressed archives.
+    \item The system shall decompress archives and restore files with matching checksums.
 \end{itemize}
 
-\section{Determination of System Requirements}
-
-\subsection{Why Such a System is Required?}
-The system is required to solve the twin challenges of data volume explosion and cyber tampering through a verifiable, open, and educational software platform. It enables users to observe compression mechanisms at the bit level while applying military-grade confidentiality before files are stored or transmitted.
-
-\subsection{Problems in Previous Implementations}
-Previous academic prototypes suffered from:
+\subsubsection{Non-Functional Requirements}
 \begin{itemize}
-    \item Inability to decompress autonomously due to unpersisted Huffman tree tables.
-    \item Vulnerability to memory overflow when encoding files larger than a few kilobytes.
-    \item Absence of user authentication and audit logging.
+    \item \textbf{Reliability}: 100\% lossless reconstruction with zero data corruption.
+    \item \textbf{Usability}: Clean, modern, and responsive user interface.
+    \item \textbf{Performance}: Rapid execution for common documents and source files.
 \end{itemize}
 
-\subsection{Hardware Requirements}
+\subsubsection{Hardware \& Software Requirements}
 \begin{itemize}
-    \item \textbf{Processor:} Modern x86-64 / AMD64 dual-core processor (Intel Core i3 / AMD Ryzen 3 or higher).
-    \item \textbf{RAM:} Minimum 512 MB (2 GB recommended for multi-megabyte file chunking).
-    \item \textbf{Hard Disk:} Minimum 100 MB free space for application storage, runtimes, and file vaults.
-    \item \textbf{Display:} Minimum $1024 \times 768$ resolution with color support for SVG tree visualization.
+    \item \textbf{Hardware Requirements}: Minimum 2.0 GHz Dual-Core CPU, 4 GB RAM, 500 MB free hard disk space.
+    \item \textbf{Software Requirements}: Windows 10/11 or Linux OS, Modern Web Browser (Chrome/Firefox/Edge), PHP 8.2+ runtime environment.
 \end{itemize}
 
-\subsection{Software Requirements}
-\begin{itemize}
-    \item \textbf{Operating System:} Windows 10 / 11, Linux (Ubuntu/Debian), or macOS.
-    \item \textbf{Runtime Environment:} PHP 8.2 or 8.3 with \texttt{OpenSSL}, \texttt{Zip}, \texttt{PDO}, \texttt{pdo\_mysql}, and \texttt{pdo\_sqlite} extensions enabled.
-    \item \textbf{Database System:} MySQL 5.7+ / 8.0+ or MariaDB; automatic fallback to SQLite 3.
-    \item \textbf{Web Browser:} Modern HTML5 browser supporting SVG and ES6 JavaScript (Google Chrome, Mozilla Firefox, Microsoft Edge).
-    \item \textbf{Web Server:} Built-in PHP development server (\texttt{php -S}) or Apache 2.4.
-\end{itemize}
-
-\subsection{Implementation Languages \& Technologies}
-\begin{itemize}
-    \item \textbf{Front-End:} HTML5, Vanilla CSS3 (Custom Obsidian Glassmorphism design tokens), Vanilla JavaScript (ES6+ Fetch API, DOM manipulation).
-    \item \textbf{Back-End Core:} Pure PHP 8.3 with strict typing (\texttt{declare(strict\_types=1)}), Object-Oriented Clean Architecture.
-    \item \textbf{Data Access:} PHP Data Objects (PDO) with parameterized prepared statements.
-\end{itemize}
-
-\section{System Feasibility}
+\section{Feasibility Study}
 
 \subsection{Technical Feasibility}
-The required technologies (PHP 8.3, OpenSSL, WebCrypto API, PDO, and modern browsers) are open-source, widely adopted, and available without licensing fees. The priority queue min-heap algorithm operates with $O(N \log K)$ computational complexity (where $N$ is file size and $K$ is alphabet size $\le 256$), ensuring low CPU overhead. The project is technically feasible.
+The system utilizes modern PHP for backend processing, HTML5/CSS3/JavaScript for frontend presentation, and SQLite/MySQL for file logging. PHP provides native bitwise operators, stream wrappers, and hash libraries. Modern browsers support high-performance drag-and-drop file APIs. Hence, the project is completely technically feasible.
 
 \subsection{Operational Feasibility}
-The system features a streamlined web UI with intuitive drag-and-drop dropzones, real-time password strength indicators, 1-click demo login credentials, and clear result metrics. Users require no specialized training to compress, encrypt, or restore files. Operational feasibility is established.
+The proposed application requires no specialized client-side software installations. Users interact with the platform through any standard web browser. The workflows for compression and decompression are straightforward, requiring only simple file uploads. Therefore, operational feasibility is high.
 
 \subsection{Economic Feasibility}
-The system is constructed using 100\% free, open-source technologies with zero software licensing costs. Minimal hardware requirements permit deployment on existing commodity hardware. Economic feasibility is confirmed.
+The entire software stack comprises free, open-source technologies (PHP, SQLite, standard web specifications). No commercial licensing, proprietary compilers, or dedicated paid server infrastructure is required. The project is economically sound and cost-effective.
 
-\section{Team Structure \& Software Process Model}
+\section{High Level Design \& Description of Algorithms}
 
-\subsection{Team Structure}
-The project followed a \textbf{Democratic Decentralized (DD)} team structure. In this structure, leadership rotates based on task domain: algorithmic development, cryptographic design, user interface engineering, and testing were coordinated through consensus and horizontal communication.
-
-\subsection{Software Process Model Used: Iterative Prototyping Model}
-The project utilized the \textbf{Iterative Prototyping Model}. This model enabled rapid development of an initial working Huffman engine, followed by incremental phases that integrated AES-256 encryption, database persistence, interactive SVG visualization, and authentication.
-
-\begin{figure}[htbp]
-\centering
-\begin{tikzpicture}[
-    node distance=1.5cm,
-    stage/.style={rectangle, draw=blue!70!black, fill=blue!10, thick, rounded corners, minimum width=3.8cm, minimum height=1.0cm, align=center, font=\small\bfseries},
-    arrow/.style={-{Stealth[length=2.5mm]}, thick, draw=blue!80!black}
-]
-    \node[stage] (req) {1. Requirements \& Theory};
-    \node[stage, below=of req] (proto) {2. Core Engine Prototype\\(Huffman \& AES-256)};
-    \node[stage, below=of proto] (arch) {3. Clean Architecture\\(Refactoring \& Layers)};
-    \node[stage, below=of arch] (ui) {4. Modern UI \& Visualizer\\(Glassmorphic Dashboard)};
-    \node[stage, below=of ui] (test) {5. Integration Testing\\\& Verification};
-
-    \draw[arrow] (req) -- (proto);
-    \draw[arrow] (proto) -- (arch);
-    \draw[arrow] (arch) -- (ui);
-    \draw[arrow] (ui) -- (test);
-
-    \draw[arrow, dashed, draw=red!70!black] (test.east) to[out=0, in=0, looseness=1.5] node[right, font=\footnotesize\color{red!70!black}] {Refine \& Iterate} (proto.east);
-\end{tikzpicture}
-\caption{Iterative Prototyping Process Model}
-\label{fig:process_model}
-\end{figure}
-
-% ==============================================================================
-% CHAPTER 3: SYSTEM DESIGN & ARCHITECTURE
-% ==============================================================================
-\chapter{System Design \& Architecture}
-
-\section{Clean Architecture Layering}
-The system strictly enforces the four concentric layers of Clean Architecture:
+\subsection{Working Mechanism of Proposed System}
+The working mechanism of the file compression and decompression lifecycle is summarized below:
 \begin{enumerate}
-    \item \textbf{Domain Layer (Enterprise Business Rules):} Contains core entities (\texttt{HuffmanNode}, \texttt{FileRecord}, \texttt{ActivityLog}, \texttt{User}) with zero external framework dependencies.
-    \item \textbf{Interfaces / Contracts Layer:} Declares abstract behavioral contracts (\texttt{CompressionInterface}, \texttt{EncryptionInterface}, \texttt{FileRepositoryInterface}, \texttt{UserRepositoryInterface}) using Dependency Inversion.
-    \item \textbf{Services Layer (Application Business Logic):} Contains concrete implementations (\texttt{HuffmanEngine}, \texttt{ZipEngine}, \texttt{AesEncryptionService}, \texttt{FileStorageService}, \texttt{AuthService}).
-    \item \textbf{Controllers / Interface Adapters:} Translates HTTP and JSON payloads into service calls (\texttt{CompressionController}, \texttt{FileController}, \texttt{AuthController}).
-    \item \textbf{Infrastructure Layer:} Implements persistence drivers (\texttt{DatabaseFileRepository}, \texttt{DatabaseUserRepository}) interfacing with MySQL and SQLite through PDO.
+    \item \textbf{Compression Pipeline}:
+    \begin{itemize}
+        \item Read raw binary data from uploaded file.
+        \item Count frequency of each byte value ($0\text{x}00$ to $0\text{xFF}$).
+        \item Insert leaf nodes into a min-heap priority queue sorted by frequency.
+        \item Repeatedly extract two nodes with the lowest frequencies, create an internal parent node with their combined frequency, and re-insert into the queue until one root node remains.
+        \item Traverse the tree from root to leaf to assign binary prefix codes (left branch = `0', right branch = `1').
+        \item Encode the original byte sequence using the generated variable-length bit codes.
+        \item Pack bits into 8-bit bytes, prepend the frequency header table, and store the output file (`.shuf').
+    \end{itemize}
+    \item \textbf{Decompression Pipeline}:
+    \begin{itemize}
+        \item Parse the frequency table header from the `.shuf` file.
+        \item Reconstruct the exact Huffman binary tree.
+        \item Read packed bits sequentially and traverse the tree from root until reaching a leaf node.
+        \item Emit the corresponding original byte and reset traversal to root for the next bits.
+        \item Verify original file size and SHA-256 hash checksum.
+    \end{itemize}
 \end{enumerate}
 
 \begin{figure}[htbp]
 \centering
 \begin{tikzpicture}[
-    layer/.style={rectangle, draw=black, thick, rounded corners, minimum width=11cm, align=center, font=\small},
-    conn/.style={-{Stealth[length=2.5mm]}, thick}
+    node distance=1.2cm and 1.5cm,
+    proc/.style={rectangle, draw=black, fill=gray!10, text width=5.5cm, align=center, minimum height=0.8cm, font=\small},
+    arrow/.style={-Latex, thick}
 ]
-    \node[layer, fill=purple!15, minimum height=1.1cm] (pres) {\textbf{1. Presentation Layer}\\HTML5 / Obsidian Glassmorphic CSS / ES6 JavaScript / SVG Graph};
-    \node[layer, fill=blue!15, minimum height=1.1cm, below=0.6cm of pres] (ctrl) {\textbf{2. Controllers \& Interface Adapters}\\CompressionController \quad\textbar\quad FileController \quad\textbar\quad AuthController};
-    \node[layer, fill=green!15, minimum height=1.3cm, below=0.6cm of ctrl] (serv) {\textbf{3. Application Services \& Domain Entities}\\HuffmanEngine \quad\textbar\quad ZipEngine \quad\textbar\quad AesEncryptionService\\Entities: HuffmanNode, FileRecord, ActivityLog, User};
-    \node[layer, fill=cyan!15, minimum height=1.1cm, below=0.6cm of serv] (infra) {\textbf{4. Infrastructure \& Persistence}\\DatabaseFileRepository \quad\textbar\quad MySQL 8.0 \quad\textbar\quad SQLite Fallback \quad\textbar\quad FileStorage};
+    \node (in) [proc, fill=blue!10] {Input File / Byte Stream};
+    \node (freq) [proc, below=of in] {Byte Frequency Analysis ($0$ to $255$)};
+    \node (heap) [proc, below=of freq] {Min-Heap Priority Queue Initialization};
+    \node (tree) [proc, below=of heap] {Binary Huffman Tree Construction};
+    \node (code) [proc, below=of tree] {Codebook Generation (Prefix Bit Codes)};
+    \node (pack) [proc, below=of code] {Bitstream Packing \& Header Writing};
+    \node (out) [proc, below=of pack, fill=green!10] {Output Compressed Archive (`.shuf`)};
 
-    \draw[conn] (pres) -- node[right, font=\footnotesize] {REST API (JSON)} (ctrl);
-    \draw[conn] (ctrl) -- node[right, font=\footnotesize] {Service Invocations} (serv);
-    \draw[conn] (serv) -- node[right, font=\footnotesize] {Repository Contracts} (infra);
+    \draw [arrow] (in) -- (freq);
+    \draw [arrow] (freq) -- (heap);
+    \draw [arrow] (heap) -- (tree);
+    \draw [arrow] (tree) -- (code);
+    \draw [arrow] (code) -- (pack);
+    \draw [arrow] (pack) -- (out);
 \end{tikzpicture}
-\caption{Clean Architecture 4-Layer System Stack}
-\label{fig:clean_arch}
-\end{figure}
-
-\section{Data Flow Diagrams (DFD)}
-
-\subsection{DFD Level 0: Context Level Diagram}
-The Level 0 Context Diagram depicts the interaction between external entities (User, Database) and the centralized Secure File Compression System boundary.
-
-\begin{figure}[htbp]
-\centering
-\begin{tikzpicture}[
-    entity/.style={rectangle, draw=blue!80!black, fill=blue!15, thick, minimum width=2.6cm, minimum height=1.2cm, align=center, font=\small\bfseries},
-    process/.style={circle, draw=purple!80!black, fill=purple!10, very thick, minimum size=3.2cm, align=center, font=\small\bfseries},
-    store/.style={rectangle, draw=green!70!black, fill=green!10, thick, minimum width=2.8cm, minimum height=0.9cm, align=center, font=\small\bfseries},
-    flow/.style={-{Stealth[length=2.5mm]}, thick, draw=black!80}
-]
-    \node[entity] (user) at (-5.5, 0) {User / Client};
-    \node[process] (sys) at (0, 0) {0.0\\Secure File\\Compression\\System};
-    \node[store] (db) at (5.5, 1.2) {D1: Relational DB\\(MySQL / SQLite)};
-    \node[store] (vault) at (5.5, -1.2) {D2: Isolated Vault\\(Storage Disk)};
-
-    \draw[flow] (user.north) to[bend left=25] node[above, font=\footnotesize] {Raw File + Password} (sys.north west);
-    \draw[flow] (sys.south west) to[bend left=25] node[below, font=\footnotesize] {Restored File / Stats} (user.south);
-    
-    \draw[flow] (sys.north east) to[bend left=20] node[above, font=\footnotesize] {Metadata \& Logs} (db.west);
-    \draw[flow] (sys.south east) to[bend right=20] node[below, font=\footnotesize] {Encrypted Archive} (vault.west);
-    \draw[flow] (vault.south) to[bend right=35] node[below, font=\footnotesize] {Fetch Archive} (sys.south);
-\end{tikzpicture}
-\caption{DFD Level 0: Context Diagram}
-\label{fig:dfd_level_0}
-\end{figure}
-
-\subsection{DFD Level 1: Macro Process Decomposition}
-The Level 1 DFD decomposes the system into its primary subsystems: Authentication, Compression, Encryption, Decompression, and Vault Management.
-
-\begin{figure}[htbp]
-\centering
-\begin{tikzpicture}[
-    node distance=1.4cm and 1.8cm,
-    proc/.style={rectangle, draw=blue!80!black, fill=blue!10, thick, rounded corners=6pt, minimum width=2.8cm, minimum height=1.1cm, align=center, font=\small\bfseries},
-    store/.style={rectangle, draw=green!70!black, fill=green!10, thick, minimum width=2.4cm, minimum height=0.8cm, align=center, font=\footnotesize\bfseries},
-    ext/.style={rectangle, draw=black, fill=gray!20, thick, minimum width=2.2cm, minimum height=1.0cm, align=center, font=\small\bfseries},
-    arrow/.style={-{Stealth[length=2mm]}, thick}
-]
-    \node[ext] (user) {User};
-    \node[proc, right=of user] (p1) {1.0\\Authenticate\\User};
-    \node[proc, below=of p1] (p2) {2.0\\Huffman / ZIP\\Compression};
-    \node[proc, right=of p2] (p3) {3.0\\AES-256\\Encryption};
-    \node[proc, below=of p2] (p4) {4.0\\Decompress \&\\Restore};
-    \node[store, below=of p3] (d1) {D1: Files \& Logs};
-    \node[store, right=of p3] (d2) {D2: Storage Disk};
-
-    \draw[arrow] (user) -- node[above, font=\footnotesize] {Login/Reg} (p1);
-    \draw[arrow] (user) |- node[near start, left, font=\footnotesize] {Raw File} (p2);
-    \draw[arrow] (p2) -- node[above, font=\footnotesize] {Bitstream} (p3);
-    \draw[arrow] (p3) -- node[above, font=\footnotesize] {Save .shuf} (d2);
-    \draw[arrow] (p3) -- node[left, font=\footnotesize] {Metadata} (d1);
-    \draw[arrow] (d2) |- node[near start, right, font=\footnotesize] {Load Archive} (p4);
-    \draw[arrow] (p4) -| node[near start, below, font=\footnotesize] {Original Bytes} (user);
-\end{tikzpicture}
-\caption{DFD Level 1: Subsystem Process Decomposition}
-\label{fig:dfd_level_1}
-\end{figure}
-
-\subsection{DFD Level 2: Compression \& Encryption Detailed Workflow}
-The Level 2 DFD outlines the algorithmic pipeline transforming a raw stream into an authenticated, encrypted archive.
-
-\begin{figure}[htbp]
-\centering
-\begin{tikzpicture}[
-    node distance=1.1cm,
-    stepnode/.style={rectangle, draw=blue!70!black, fill=blue!8, thick, rounded corners, minimum width=4.5cm, minimum height=0.85cm, align=center, font=\footnotesize\bfseries},
-    arr/.style={-{Stealth[length=2.2mm]}, thick, draw=blue!80!black}
-]
-    \node[stepnode] (s1) {2.1 Frequency Analysis (0--255 Count)};
-    \node[stepnode, below=of s1] (s2) {2.2 Priority Queue Min-Heap Merging};
-    \node[stepnode, below=of s2] (s3) {2.3 Codeword Extraction (Prefix Codes)};
-    \node[stepnode, below=of s3] (s4) {2.4 Bitstream Packing \& HUF1 Header};
-    \node[stepnode, below=of s4] (s5) {3.1 PBKDF2 Key Derivation (15,000 Iters)};
-    \node[stepnode, below=of s5] (s6) {3.2 AES-256-CBC Cipher Block Chaining};
-    \node[stepnode, below=of s6] (s7) {3.3 Encrypt-then-MAC (HMAC-SHA256)};
-
-    \draw[arr] (s1) -- node[right, font=\scriptsize] {Byte Frequencies} (s2);
-    \draw[arr] (s2) -- node[right, font=\scriptsize] {Binary Tree Root} (s3);
-    \draw[arr] (s3) -- node[right, font=\scriptsize] {Dictionary Codebook} (s4);
-    \draw[arr] (s4) -- node[right, font=\scriptsize] {Packed Bitstream} (s5);
-    \draw[arr] (s5) -- node[right, font=\scriptsize] {256-bit Key + IV} (s6);
-    \draw[arr] (s6) -- node[right, font=\scriptsize] {Ciphertext Payload} (s7);
-\end{tikzpicture}
-\caption{DFD Level 2: Detailed Compression and Cryptographic Pipeline}
-\label{fig:dfd_level_2}
-\end{figure}
-
-\section{Control Flow Diagram (CFD) / Flowchart}
-The Control Flow Diagram displays conditional logic branching, authentication gating, algorithm choices, and cryptographic integrity verification.
-
-\begin{figure}[htbp]
-\centering
-\begin{tikzpicture}[
-    node distance=1.2cm,
-    term/.style={rectangle, rounded corners=10pt, draw=black, fill=gray!20, thick, minimum width=2.4cm, minimum height=0.7cm, font=\footnotesize\bfseries},
-    decision/.style={diamond, draw=red!80!black, fill=red!10, thick, aspect=2.0, font=\scriptsize\bfseries, align=center},
-    action/.style={rectangle, draw=blue!80!black, fill=blue!10, thick, rounded corners, minimum width=3.2cm, minimum height=0.8cm, font=\scriptsize\bfseries, align=center},
-    arr/.style={-{Stealth[length=2mm]}, thick}
-]
-    \node[term] (start) {Start};
-    \node[decision, below=0.8cm of start] (auth) {Authenticated?};
-    \node[action, right=1.2cm of auth] (login) {Show Login Modal\\(Demo Auto-Fill)};
-    \node[decision, below=0.8cm of auth] (actiontype) {Operation Mode?};
-    \node[action, left=1.2cm of actiontype] (comp) {Read Raw File \&\\Compute Frequencies};
-    \node[action, right=1.2cm of actiontype] (dec) {Read Archive Payload};
-    
-    \node[decision, below=0.8cm of comp] (enccheck) {Password Set?};
-    \node[action, below=0.8cm of enccheck] (aesenc) {Apply PBKDF2 \&\\AES-256-CBC + HMAC};
-    \node[action, left=0.8cm of aesenc] (noenc) {Package HUF1 Payload};
-
-    \node[decision, below=0.8cm of dec] (dechenccheck) {Magic = ENC1?};
-    \node[action, below=0.8cm of dechenccheck] (verifyhmac) {Verify HMAC-SHA256\\\& Decrypt Payload};
-    \node[action, below=0.8cm of verifyhmac] (hufdec) {Traverse Tree \& Restore Bytes};
-
-    \node[term, below=1.0cm of aesenc] (finish) {Download \& Log Event};
-
-    \draw[arr] (start) -- (auth);
-    \draw[arr] (auth) -- node[above, font=\scriptsize] {No} (login);
-    \draw[arr] (login) |- (auth);
-    \draw[arr] (auth) -- node[right, font=\scriptsize] {Yes} (actiontype);
-    \draw[arr] (actiontype) -- node[above, font=\scriptsize] {Compress} (comp);
-    \draw[arr] (actiontype) -- node[above, font=\scriptsize] {Decompress} (dec);
-
-    \draw[arr] (comp) -- (enccheck);
-    \draw[arr] (enccheck) -- node[right, font=\scriptsize] {Yes} (aesenc);
-    \draw[arr] (enccheck) -| node[above, font=\scriptsize] {No} (noenc);
-    \draw[arr] (noenc) |- (finish);
-    \draw[arr] (aesenc) -- (finish);
-
-    \draw[arr] (dec) -- (dechenccheck);
-    \draw[arr] (dechenccheck) -- node[right, font=\scriptsize] {Yes} (verifyhmac);
-    \draw[arr] (verifyhmac) -- (hufdec);
-    \draw[arr] (hufdec) |- (finish);
-\end{tikzpicture}
-\caption{Control Flow Diagram (CFD) of System Operation}
-\label{fig:cfd_workflow}
-\end{figure}
-
-\section{Entity-Relationship (ER) Diagram}
-The relational schema comprises four primary entities: \texttt{USERS}, \texttt{FILES}, \texttt{ACTIVITY\_LOGS}, and \texttt{SHARED\_LINKS}.
-
-\begin{figure}[htbp]
-\centering
-\begin{tikzpicture}[
-    entity/.style={rectangle, draw=blue!80!black, fill=blue!15, thick, minimum width=3.2cm, minimum height=1.8cm, align=left, font=\scriptsize},
-    rel/.style={diamond, draw=red!70!black, fill=red!10, thick, aspect=1.6, font=\scriptsize\bfseries, align=center},
-    arr/.style={thick}
-]
-    \node[entity] (users) at (-4, 2.5) {
-        \textbf{\underline{USERS}}\\[2pt]
-        $\bullet$ \underline{id} (PK, INT)\\
-        $\bullet$ username (VARCHAR)\\
-        $\bullet$ email (VARCHAR)\\
-        $\bullet$ password\_hash (VARCHAR)\\
-        $\bullet$ created\_at (DATETIME)
-    };
-
-    \node[entity] (files) at (4, 2.5) {
-        \textbf{\underline{FILES}}\\[2pt]
-        $\bullet$ \underline{id} (PK, INT)\\
-        $\bullet$ user\_id (FK, INT)\\
-        $\bullet$ original\_name (VARCHAR)\\
-        $\bullet$ stored\_name (VARCHAR)\\
-        $\bullet$ algorithm (VARCHAR)\\
-        $\bullet$ is\_encrypted (BOOLEAN)\\
-        $\bullet$ original\_size (BIGINT)\\
-        $\bullet$ compressed\_size (BIGINT)\\
-        $\bullet$ sha256\_checksum (VARCHAR)
-    };
-
-    \node[entity] (logs) at (-4, -2.5) {
-        \textbf{\underline{ACTIVITY\_LOGS}}\\[2pt]
-        $\bullet$ \underline{id} (PK, INT)\\
-        $\bullet$ action (VARCHAR)\\
-        $\bullet$ file\_id (INT, NULL)\\
-        $\bullet$ filename (VARCHAR)\\
-        $\bullet$ status (VARCHAR)\\
-        $\bullet$ ip\_address (VARCHAR)\\
-        $\bullet$ details (TEXT)
-    };
-
-    \node[entity] (links) at (4, -2.5) {
-        \textbf{\underline{SHARED\_LINKS}}\\[2pt]
-        $\bullet$ \underline{id} (PK, INT)\\
-        $\bullet$ file\_id (FK, INT)\\
-        $\bullet$ access\_token (VARCHAR)\\
-        $\bullet$ password\_hash (VARCHAR)\\
-        $\bullet$ expires\_at (DATETIME)\\
-        $\bullet$ downloads\_left (INT)
-    };
-
-    \node[rel] (r1) at (0, 2.5) {owns};
-    \node[rel] (r2) at (4, 0) {generates};
-    \node[rel] (r3) at (-4, 0) {tracks};
-
-    \draw[arr] (users) -- node[above, font=\scriptsize] {1} (r1);
-    \draw[arr] (r1) -- node[above, font=\scriptsize] {N} (files);
-
-    \draw[arr] (files) -- node[right, font=\scriptsize] {1} (r2);
-    \draw[arr] (r2) -- node[right, font=\scriptsize] {N} (links);
-
-    \draw[arr] (users) -- node[left, font=\scriptsize] {1} (r3);
-    \draw[arr] (r3) -- node[left, font=\scriptsize] {N} (logs);
-\end{tikzpicture}
-\caption{Entity-Relationship (ER) Diagram}
-\label{fig:er_diagram}
+\caption{High Level Flowchart of Proposed Huffman Compression System}
+\label{fig:flowchart}
 \end{figure}
 
 % ==============================================================================
-% CHAPTER 4: ALGORITHM & MATHEMATICAL ANALYSIS
+% CHAPTER 4: GANTT CHART & EXPECTED OUTCOMES
 % ==============================================================================
-\chapter{Algorithm \& Mathematical Analysis}
+\chapter{Project Timeline \& Expected Outcomes}
 
-\section{Information Theory \& Shannon Entropy}
-Claude Shannon defined the theoretical lower bound for lossless compression in 1948. For an alphabet $\mathcal{S} = \{s_1, s_2, \dots, s_K\}$ with occurrence probabilities $P(s_i)$, the \textbf{Shannon Entropy} $H(X)$ is formulated as:
-\begin{equation}
-    H(X) = - \sum_{i=1}^{K} P(s_i) \log_2 P(s_i) \quad \text{(bits per symbol)}
-\end{equation}
-
-Shannon's Source Coding Theorem establishes that no lossless compression algorithm can represent data with fewer average bits than $H(X)$. 
-
-Given an alphabet codebook with codeword lengths $l_i = \text{length}(\text{code}(s_i))$, the average codeword length $L_{\text{avg}}$ is:
-\begin{equation}
-    L_{\text{avg}} = \sum_{i=1}^{K} P(s_i) \cdot l_i
-\end{equation}
-
-The theoretical \textbf{Coding Efficiency} $\eta$ is measured as:
-\begin{equation}
-    \eta = \frac{H(X)}{L_{\text{avg}}} \times 100\%
-\end{equation}
-
-\section{Huffman Coding Engine Implementation}
-Huffman coding constructs an optimal prefix tree (where no codeword is a prefix of any other, enabling unambiguous continuous streaming).
-
-\subsection{Algorithmic Steps}
-\begin{enumerate}
-    \item \textbf{Scan \& Frequency Map:} Read byte sequence of length $N$. Tally occurrences $f(b)$ for every distinct byte $b \in [0, 255]$.
-    \item \textbf{Priority Queue Initialization:} Insert all symbols into a min-priority queue where priority is frequency $f(b)$.
-    \item \textbf{Tree Construction:} Repeatedly extract the two minimum nodes $n_1$ and $n_2$. Form a parent internal node $n_p$ with frequency $f(n_p) = f(n_1) + f(n_2)$ and children $n_{\text{left}} = n_1$, $n_{\text{right}} = n_2$. Insert $n_p$ back into the queue. Repeat until one root node remains.
-    \item \textbf{Prefix Code Assignment:} Traverse from root to leaves. Append \texttt{'0'} when branching left and \texttt{'1'} when branching right.
-    \item \textbf{Bit Packing:} Transform the variable bitstrings into 8-bit unsigned integers via bitwise shift operations ($(\text{buffer} \ll 1) \mid \text{bit}$).
-\end{enumerate}
-
-\subsection{Why Pre-Compressed Files (PDF, JPG) Expand: The Entropy Limit}
-When compressing structured uncompressed files (\texttt{.txt}, \texttt{.csv}, \texttt{.json}, source code), symbol frequencies are non-uniform (e.g., spaces and vowels dominate), producing high compression savings ($30\%\text{--}60\%$).
-
-Conversely, modern formats like \textbf{PDF, JPEG, and ZIP} are already pre-compressed using internal Deflate/DCT encoders. In these formats, byte distributions approach uniform randomness, meaning:
-\begin{equation}
-    P(s_i) \approx \frac{1}{256} \implies H(X) \approx \log_2(256) = 8.0 \text{ bits/byte}
-\end{equation}
-When entropy reaches 8 bits per byte, Huffman coding cannot assign codes shorter than 8 bits without violating Kraft's inequality. Furthermore, our autonomous archive format stores a \textbf{frequency table header} ($\approx 1.2\text{ KB}$ for 256 symbols) so that decompression can operate without external codebooks. 
-Adding this necessary header overhead to an already maximally-compressed payload results in a small negative ratio (e.g., $-4.15\%$). This behavior confirms the \textbf{Pigeonhole Principle} of computer science: no lossless compression algorithm can compress all possible input bitstrings.
-
-\section{AES-256 Authenticated Encryption}
-To ensure security, the system implements the \textbf{Encrypt-then-MAC (EtM)} architecture.
-\begin{enumerate}
-    \item \textbf{Key Derivation:} Given passphrase $K_{\text{pass}}$ and a cryptographically random 16-byte salt, PBKDF2 generates a 64-byte derived key:
-    \begin{equation}
-        K_{\text{derived}} = \text{PBKDF2-HMAC-SHA256}(K_{\text{pass}}, \text{salt}, 15000, 64)
-    \end{equation}
-    The first 32 bytes constitute the encryption key $K_{\text{enc}}$, and the remaining 32 bytes form the MAC authentication key $K_{\text{mac}}$.
-    \item \textbf{AES-256-CBC Encryption:} Plaintext bitstream $P$ is encrypted with random 16-byte initialization vector (IV):
-    \begin{equation}
-        C = \text{AES-256-CBC}(P, K_{\text{enc}}, \text{IV})
-    \end{equation}
-    \item \textbf{HMAC Authentication:} An authentication signature $T$ is computed over the entire container:
-    \begin{equation}
-        T = \text{HMAC-SHA256}(K_{\text{mac}}, \text{salt} \parallel \text{IV} \parallel C)
-    \end{equation}
-    During decryption, timing-safe equality comparison ($\text{hash\_equals}$) validates $T$ prior to cipher execution, preventing chosen-ciphertext and bit-flipping attacks.
-\end{enumerate}
-
-% ==============================================================================
-% CHAPTER 5: TESTING & RESULTS
-% ==============================================================================
-\chapter{Testing \& Results}
-
-\section{Test Suite Verification}
-Testing was conducted using an automated CLI suite (\texttt{test\_system.php}) and real-world browser execution.
+\section{Gantt Chart (Project Timeline)}
+The proposed project is scheduled for a completion timeline of \textbf{four (4) months}. Table~\ref{tab:gantt} illustrates the work breakdown schedule across the four-month implementation lifecycle.
 
 \begin{table}[htbp]
 \centering
-\small
-\begin{tabularx}{\textwidth}{l p{4.2cm} p{4.2cm} c}
+\caption{Four-Month Project Work Schedule (Gantt Chart)}
+\label{tab:gantt}
+\begin{tabularx}{\textwidth}{lXXXX}
 \toprule
-\textbf{Test ID} & \textbf{Test Scenario} & \textbf{Expected Result} & \textbf{Status} \\
+\textbf{Activity / Milestone} & \textbf{Month 1} & \textbf{Month 2} & \textbf{Month 3} & \textbf{Month 4} \\
 \midrule
-TC-01 & Database connection initialization & Connects to MySQL; falls back to SQLite & \textbf{PASSED} \\
-TC-02 & Lossless Huffman Roundtrip & Decompressed text matches input byte-for-byte & \textbf{PASSED} \\
-TC-03 & AES-256 Correct Passphrase & Decrypts valid ciphertext without corruption & \textbf{PASSED} \\
-TC-04 & AES-256 Tamper Rejection & Invalid password triggers HMAC mismatch exception & \textbf{PASSED} \\
-TC-05 & DEFLATE (ZIP) Roundtrip & Gzuncompress restores original file data & \textbf{PASSED} \\
-TC-06 & User Registration & Hashes password with bcrypt (\$2y\$12) & \textbf{PASSED} \\
-TC-07 & Authentication Guard & Unauthenticated API requests receive HTTP 401 & \textbf{PASSED} \\
-TC-08 & 1-Click Demo Login & Auto-authenticates \texttt{demo\_user} & \textbf{PASSED} \\
+Requirement Gathering \& Feasibility & \textbf{[XXXX]} & & & \\
+Literature Review \& Algorithmic Study & \textbf{[XXXX]} & & & \\
+System Architecture \& Database Design & & \textbf{[XXXX]} & & \\
+Huffman Engine Core Implementation & & \textbf{[XXXX]} & & \\
+Bitstream Packing \& Tree Serialization & & & \textbf{[XXXX]} & \\
+Web Interface \& API Integration & & & \textbf{[XXXX]} & \\
+Lossless Verification \& Testing & & & & \textbf{[XXXX]} \\
+Documentation, Report \& Defense & & & & \textbf{[XXXX]} \\
 \bottomrule
 \end{tabularx}
-\caption{System Test Case Execution Summary}
-\label{tab:test_cases}
 \end{table}
 
-\section{Empirical Compression Performance Comparison}
-The system was benchmarked across varied content categories to contrast Huffman coding against DEFLATE level 9.
-
-\begin{table}[htbp]
-\centering
-\small
-\begin{tabularx}{\textwidth}{l r r r r}
-\toprule
-\textbf{File Type} & \textbf{Original Size} & \textbf{Huffman Size} & \textbf{ZIP Size} & \textbf{Huffman Ratio} \\
-\midrule
-Plaintext Source Code (\texttt{.php}) & 12,450 B & 7,120 B & 3,450 B & \textbf{+42.81\%} \\
-Text Corpus (\texttt{sample.txt}) & 4,890 B & 2,780 B & 1,420 B & \textbf{+43.15\%} \\
-Pre-compressed Document (\texttt{.pdf}) & 30,024 B & 31,270 B & 30,080 B & \textbf{-4.15\%} \\
-Bitmap Image (\texttt{.bmp}) & 85,200 B & 48,100 B & 22,400 B & \textbf{+43.54\%} \\
-\bottomrule
-\end{tabularx}
-\caption{Empirical File Compression Results}
-\label{tab:compression_results}
-\end{table}
+\section{Expected Outcomes}
+Upon completion of this project, the following deliverables and outcomes are anticipated:
+\begin{enumerate}
+    \item A fully working, lossless file compression and decompression software tool implementing Huffman entropy coding.
+    \item Documented size reductions ranging from 20\% to 60\% on text documents, source code, and structured log files.
+    \item Perfect file restoration confirmed through automated SHA-256 hash comparison.
+    \item An intuitive, web-based graphical interface for effortless drag-and-drop user interaction.
+    \item Complete technical documentation and source code repository available for academic evaluation.
+\end{enumerate}
 
 % ==============================================================================
-% CHAPTER 6: CONCLUSION & FUTURE SCOPE
+% CHAPTER 5: CONCLUSION & REFERENCES
 % ==============================================================================
-\chapter{Conclusion \& Future Scope}
+\chapter{Conclusion \& References}
 
 \section{Conclusion}
-The \textbf{Secure File Compression System} successfully demonstrates that entropy-based data reduction and military-grade authenticated encryption can be integrated inside a modular, decoupled Clean Architecture. The project meets all academic objectives:
-\begin{itemize}
-    \item Implemented lossless Huffman coding with min-heap construction and self-contained header reconstruction.
-    \item Enforced AES-256-CBC encryption with PBKDF2 key derivation and HMAC-SHA256 authentication.
-    \item Delivered an educational interface with interactive SVG prefix trees, codebook tables, and Shannon Entropy calculations.
-    \item Provided a dual-database persistence system (MySQL/SQLite) and user authentication with bcrypt password hashing.
-\end{itemize}
+Data compression continues to serve as an indispensable pillar of modern digital communications and storage architecture. This project proposal establishes the technical blueprint for developing an accessible, reliable, and mathematically verified \textbf{File Compression System} grounded in the principles of \textbf{Huffman Coding}.
 
-\section{Future Scope}
-Future enhancements planned for the platform include:
-\begin{itemize}
-    \item \textbf{Adaptive Huffman Coding (Vitter Algorithm):} Implementing one-pass dynamic tree adjustment to eliminate header frequency table overhead on small files.
-    \item \textbf{Parallel Multi-Threaded Chunking:} Utilizing Web Workers on the frontend and worker threads in PHP for multi-gigabyte file compression.
-    \item \textbf{Public Key Infrastructure (RSA / ECC):} Allowing users to compress and encrypt archives with a recipient's public key for zero-shared-secret communication.
-\end{itemize}
+By focusing strictly on Huffman entropy encoding, the system eliminates unnecessary complexity while delivering optimal prefix code construction, rigorous lossless restoration, and user-friendly interaction. The planned four-month execution schedule ensures orderly progression from theoretical analysis to full implementation, empirical verification, and academic delivery.
 
-% ==============================================================================
-% REFERENCES
-% ==============================================================================
-\begin{thebibliography}{99}
-    \bibitem{huffman1952}
-    D. A. Huffman, ``A Method for the Construction of Minimum-Redundancy Codes,'' \textit{Proceedings of the IRE}, vol. 40, no. 9, pp. 1098--1101, Sept. 1952.
-
-    \bibitem{shannon1948}
-    C. E. Shannon, ``A Mathematical Theory of Communication,'' \textit{Bell System Technical Journal}, vol. 27, no. 3, pp. 379--423, July 1948.
-
-    \bibitem{cleanarch}
-    R. C. Martin, \textit{Clean Architecture: A Craftsman's Guide to Software Structure and Design}, Prentice Hall, 2017.
-
-    \bibitem{nist80038a}
-    National Institute of Standards and Technology, ``Recommendation for Block Cipher Modes of Operation: Methods and Techniques,'' \textit{NIST SP 800-38A}, 2001.
-
-    \bibitem{rfc1951}
-    P. Deutsch, ``DEFLATE Compressed Data Format Specification version 1.3,'' \textit{RFC 1951}, May 1996.
-
-    \bibitem{rfc2898}
-    B. Kaliski, ``PKCS \#5: Password-Based Cryptography Specification Version 2.0,'' \textit{RFC 2898}, Sept. 2000.
-\end{thebibliography}
+\section{References}
+\begin{enumerate}
+    \item D. A. Huffman, ``A Method for the Construction of Minimum-Redundancy Codes,'' \textit{Proceedings of the IRE}, vol. 40, no. 9, pp. 1098--1101, Sept. 1952.
+    \item C. E. Shannon, ``A Mathematical Theory of Communication,'' \textit{Bell System Technical Journal}, vol. 27, no. 3, pp. 379--423, July 1948.
+    \item D. E. Knuth, ``Dynamic Huffman Coding,'' \textit{Journal of Algorithms}, vol. 6, no. 2, pp. 163--180, June 1985.
+    \item T. H. Cormen, C. E. Leiserson, R. L. Rivest, and C. Stein, \textit{Introduction to Algorithms}, 3rd ed. Cambridge, MA: MIT Press, 2009.
+    \item K. Sayood, \textit{Introduction to Data Compression}, 5th ed. San Francisco, CA: Morgan Kaufmann, 2017.
+    \item I. H. Witten, R. M. Neal, and J. G. Cleary, ``Arithmetic Coding for Data Compression,'' \textit{Communications of the ACM}, vol. 30, no. 6, pp. 520--540, June 1987.
+\end{enumerate}
 
 \end{document}
