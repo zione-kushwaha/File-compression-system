@@ -1,10 +1,10 @@
-\documentclass[12pt,a4paper]{report}
+\documentclass[12pt,a4paper]{article}
 
 \usepackage[utf8]{inputenc}
 \usepackage[a4paper, top=1in, bottom=1in, right=1in, left=1.25in]{geometry}
-\usepackage{mathptmx} % Times New Roman font equivalent
+\usepackage{mathptmx} % Times New Roman font
 \usepackage{setspace}
-\setstretch{1.5} % 1.5 line spacing as required
+\setstretch{1.5} % 1.5 line spacing
 \usepackage{amsmath,amssymb}
 \usepackage{graphicx}
 \usepackage{booktabs}
@@ -14,7 +14,7 @@
 \usepackage[font={bf,normalsize},labelfont=bf,justification=centering]{caption}
 \usepackage{hyperref}
 \usepackage{tikz}
-\usetikzlibrary{shapes.geometric,arrows.meta,positioning,calc}
+\usetikzlibrary{shapes.geometric,arrows.meta,positioning,calc,patterns}
 
 % Justified text alignment
 \hyphenpenalty=1000
@@ -28,25 +28,21 @@
 \renewcommand{\headrulewidth}{0pt}
 \renewcommand{\footrulewidth}{0pt}
 
-% Section Headings Styling according to university standards:
-% Chapter / Main Title: 16pt Bold
-% Section Heading: 14pt Bold
-% Sub-section Heading: 12pt Bold
-\titleformat{\chapter}[display]
-  {\normalfont\fontsize{16}{20}\bfseries\centering}{\chaptertitlename\ \thechapter}{10pt}{\fontsize{16}{20}\bfseries}
-\titlespacing*{\chapter}{0pt}{-10pt}{20pt}
-
+% University Prescribed Headings Formatting:
+% Main Headings: 16pt Bold
+% Sub-headings: 14pt Bold
+% Sub-sub-headings: 12pt Bold
 \titleformat{\section}
-  {\normalfont\fontsize{14}{18}\bfseries}{\thesection}{1em}{}
-\titlespacing*{\section}{0pt}{14pt}{6pt}
+  {\normalfont\fontsize{16}{20}\bfseries}{\thesection.}{0.8em}{}
+\titlespacing*{\section}{0pt}{18pt}{8pt}
 
 \titleformat{\subsection}
-  {\normalfont\fontsize{12}{15}\bfseries}{\thesubsection}{1em}{}
-\titlespacing*{\subsection}{0pt}{10pt}{4pt}
+  {\normalfont\fontsize{14}{18}\bfseries}{\thesubsection}{0.8em}{}
+\titlespacing*{\subsection}{0pt}{14pt}{6pt}
 
 \titleformat{\subsubsection}
-  {\normalfont\fontsize{12}{15}\bfseries}{\thesubsubsection}{1em}{}
-\titlespacing*{\subsubsection}{0pt}{8pt}{3pt}
+  {\normalfont\fontsize{12}{16}\bfseries}{\thesubsubsection}{0.8em}{}
+\titlespacing*{\subsubsection}{0pt}{10pt}{4pt}
 
 \hypersetup{
     colorlinks=true,
@@ -69,213 +65,184 @@
     {\fontsize{14}{18}\bfseries ON\par}
     \vspace{0.6cm}
     {\fontsize{16}{22}\bfseries FILE COMPRESSION SYSTEM USING HUFFMAN CODING\par}
-    \vspace{2.0cm}
+    \vspace{2.2cm}
     
-    {\fontsize{12}{16}\selectfont A Project Proposal Submitted in Partial Fulfillment of the\\
+    {\fontsize{12}{18}\selectfont A Project Proposal Submitted in Partial Fulfillment of the\\
     Requirements for the Degree of Bachelor of Technology\par}
-    \vspace{3.0cm}
+    \vspace{3.5cm}
     
     \begin{minipage}{0.45\textwidth}
         \begin{flushleft}
-            {\fontsize{12}{15}\bfseries Submitted By:}\\[0.3cm]
-            {\fontsize{12}{15}\bfseries Aarti Kushwaha}
+            {\fontsize{12}{16}\bfseries Submitted By:}\\[0.3cm]
+            {\fontsize{12}{16}\bfseries Aarti Kushwaha}
         \end{flushleft}
     \end{minipage}
     \hfill
     \begin{minipage}{0.45\textwidth}
         \begin{flushright}
-            {\fontsize{12}{15}\bfseries Under the Guidance of:}\\[0.3cm]
-            {\fontsize{12}{15}\bfseries Project Supervisor}
+            {\fontsize{12}{16}\bfseries Under the Guidance of:}\\[0.3cm]
+            {\fontsize{12}{16}\bfseries Project Supervisor}
         \end{flushright}
     \end{minipage}
     
     \vfill
-    {\fontsize{12}{15}\bfseries Academic Session 2025--2026\par}
+    {\fontsize{12}{16}\bfseries Academic Session 2025--2026\par}
 \end{titlepage}
 
 % ==============================================================================
-% PRELIMINARY PAGES (ROMAN NUMERALS)
-% ==============================================================================
-\pagenumbering{roman}
-\setcounter{page}{1}
-
-% Certificate / Approval Page
-\chapter*{Certificate of Approval}
-\thispagestyle{fancy}
-
-This is to certify that the project proposal entitled \textbf{``File Compression System Using Huffman Coding''} submitted by \textbf{Aarti Kushwaha} in partial fulfillment of the requirements for the award of the Degree of Bachelor of Technology has been examined and approved as an authentic proposal work carried out under supervision.
-
-\vspace{3.0cm}
-\noindent
-\begin{minipage}{0.45\textwidth}
-    \hrulefill\\
-    \centering
-    \textbf{Project Supervisor}
-\end{minipage}
-\hfill
-\begin{minipage}{0.45\textwidth}
-    \hrulefill\\
-    \centering
-    \textbf{Internal / External Examiner}
-\end{minipage}
-
-\newpage
-\tableofcontents
-\newpage
-
-% ==============================================================================
-% CHAPTER 1: PROJECT PROPOSAL BODY (NUMERIC PAGE NUMBERING FROM 1)
+% PROPOSAL BODY (STARTS AT PAGE 1, NUMERIC BOTTOM CENTER)
 % ==============================================================================
 \pagenumbering{arabic}
 \setcounter{page}{1}
 
-\chapter{Introduction}
-
+% ------------------------------------------------------------------------------
+% 1. INTRODUCTION
+% ------------------------------------------------------------------------------
 \section{Introduction}
-In modern computing environments, the rapid expansion of digital information has made efficient data transmission and compact storage critical necessities. Data compression algorithms minimize the physical space required to store information while conserving transmission bandwidth across communications networks.
 
-Compression methods are fundamentally categorized into lossy and lossless algorithms. While lossy compression achieves higher compression ratios by discarding perceptual redundancies (such as in audio or photographic formats), lossless compression reconstructs original binary data exactly, bit-for-bit. For text documents, source code, database dumps, and application binaries, lossless compression is strictly mandatory.
+In modern computing, the explosive growth of digital information has made efficient data transmission and compact storage paramount engineering necessities. Every software application, database system, and communication network continually handles large volumes of text documents, source code repositories, transaction logs, and binary payloads. Storing and transmitting these files in raw uncompressed formats consumes excessive storage and saturates network bandwidth.
 
-This project focuses on the study, design, and implementation of a \textbf{File Compression System} using the classical \textbf{Huffman Coding algorithm}. The application enables users to compress and decompress arbitrary files efficiently through an interactive web-based graphical interface with complete lossless integrity.
+Data compression algorithms resolve these inefficiencies by identifying and eliminating redundancies within source data. Compression techniques fall fundamentally into two major categories: lossy compression and lossless compression. Lossy compression achieves higher compression ratios by permanently discarding perceptual redundancies; this is suitable for audio, video, and photographs, but completely unacceptable for structured data. Conversely, \textbf{lossless compression} guarantees exact, bit-for-bit reconstruction of the original input without a single bit of alteration or distortion.
 
-\section{Background Study}
-The theoretical foundation of lossless compression originated in Claude Shannon's landmark 1948 paper, \textit{``A Mathematical Theory of Communication''}, which defined the concept of Shannon Entropy as the fundamental lower bound on the average number of bits required to encode symbol alphabets. 
+This project focuses on the study, design, and software implementation of a \textbf{File Compression System} based on the classical \textbf{Huffman Coding algorithm}. Huffman coding is an optimal, greedy prefix-entropy encoding method that generates variable-length codes based on the statistical occurrence frequencies of characters. Frequent symbols are assigned shorter binary codewords, while infrequent symbols receive longer codewords, achieving optimal prefix compression with zero information loss.
 
-In 1952, David A. Huffman developed an optimal greedy method for constructing variable-length prefix-free codes based on known symbol occurrence frequencies. Huffman coding establishes an optimal prefix property: no assigned code string is a prefix of any other code string, allowing continuous and unambiguous sequential decoding without special delimiters. 
+\subsection{Background Study}
+The theoretical foundation of lossless data compression was established by Claude Shannon in his landmark 1948 publication, \textit{``A Mathematical Theory of Communication''}. Shannon introduced the fundamental concept of Information Entropy ($H$), defining the theoretical lower bound on the average number of bits required to represent symbols emitted by an information source:
+\begin{equation}
+H(X) = -\sum_{i=1}^{n} P(x_i) \log_2 P(x_i)
+\end{equation}
+where $P(x_i)$ denotes the probability of occurrence of symbol $x_i$.
 
-In conventional computing environments, proprietary or complex compression utilities often mask the underlying algorithmic mechanisms. This proposal aims to provide an accessible, self-contained implementation that bridges theoretical information theory with practical software engineering.
+In 1952, David A. Huffman solved the problem of constructing an optimal prefix-free code for a given discrete probability distribution in his seminal paper, \textit{``A Method for the Construction of Minimum-Redundancy Codes''}. Huffman's algorithm builds a binary tree from the bottom up using a min-heap priority queue, guaranteeing that no code is a prefix of another (the prefix-free property). This allows sequential decoding of compressed bitstreams without ambiguity and without needing delimiter tokens.
 
-\section{Scope}
-The scope of this project encompasses:
+While modern operating systems incorporate general-purpose compression utilities, they frequently combine multiple complex layers (such as dictionary matching, sliding windows, and dynamic Huffman coding) into closed, opaque utilities. This proposal presents an accessible, transparent, and mathematically verified implementation of canonical Huffman coding that demonstrates lossless data compaction directly on real-world files.
+
+\subsection{Scope}
+The scope of the proposed project encompasses the following engineering milestones:
 \begin{enumerate}
-    \item Development of an automated byte-frequency counter and min-heap binary tree generator in software.
-    \item Generation of variable-length prefix codes and bit-level bitstream packing for arbitrary file formats.
-    \item Embedding self-contained header metadata containing serialized tree structures to permit independent decompression.
-    \item Lossless decompression engine to restore encoded files byte-for-byte with SHA-256 verification.
-    \item A clean, responsive user interface allowing drag-and-drop file upload, compression tracking, and history management.
+    \item \textbf{Byte-Level Frequency Analysis}: Development of an automated binary stream reader capable of computing character frequencies across the full 256-byte ASCII/binary spectrum ($0\text{x}00$ to $0\text{xFF}$).
+    \item \textbf{Priority Queue \& Tree Construction}: Construction of a min-heap priority queue to synthesize the optimal binary Huffman tree in $O(n \log n)$ time.
+    \item \textbf{Variable-Length Prefix Codeword Generation}: Extraction of binary codewords by tree traversal and bit-level bitstream packing.
+    \item \textbf{Self-Contained Archive Architecture}: Embedding the serialized frequency codebook header directly into the compressed archive (`.shuf`) so that decompression requires no external dictionary files.
+    \item \textbf{Lossless Decompression Engine}: Ingestion of packed archives, reconstruction of the binary prefix tree, sequential bit traversal, and byte-for-byte original file restoration.
+    \item \textbf{Cryptographic Integrity Verification}: Pre- and post-compression SHA-256 hash comparison to mathematically certify 100\% lossless fidelity.
+    \item \textbf{Interactive Web Dashboard}: A clean, responsive user interface facilitating drag-and-drop file upload, download of compressed archives, and activity session tracking.
 \end{enumerate}
 
-\section{Limitations}
-The system operates under the following identified limitations:
+\subsection{Limitations}
+The system operates within the following identified technical boundaries:
 \begin{enumerate}
-    \item \textbf{Pre-compressed File Limitations}: Files that already exhibit high Shannon entropy (such as JPEG images, MP4 videos, or previously compressed ZIP files) cannot be substantially compressed further and may slightly expand due to the overhead of the frequency dictionary header.
-    \item \textbf{Static Huffman Tree Overhead}: For very small input files (e.g., files under 100 bytes), the storage cost of transmitting the codebook frequency table in the header can exceed the space saved from bit-level compaction.
-    \item \textbf{Single-Node Execution}: Initial implementation is targeted for standalone desktop and local web server execution rather than distributed cloud clusters.
+    \item \textbf{Pre-compressed File Limitations}: Files that already possess near-maximum Shannon entropy (such as JPEG, PNG, MP4, and ZIP archives) have virtually no statistical redundancy. Compressing these files with Huffman coding yields little to no reduction and can lead to minor negative expansion due to the frequency header table.
+    \item \textbf{Header Overhead on Small Files}: For files of very small size (e.g., under 100 bytes), the storage cost of storing the frequency codebook dictionary in the archive header can outweigh the compression savings achieved by bit compaction.
+    \item \textbf{Single-System Scope}: The application is engineered for standalone desktop and local web server execution rather than multi-node distributed streaming clusters.
 \end{enumerate}
 
-% ==============================================================================
-% CHAPTER 2: PROBLEM STATEMENT & OBJECTIVES
-% ==============================================================================
-\chapter{Problem Statement \& Objectives}
-
+% ------------------------------------------------------------------------------
+% 2. PROBLEM STATEMENT
+% ------------------------------------------------------------------------------
 \section{Problem Statement}
-Every day, computer users and organizations handle vast volumes of documents, log files, configuration data, and scripts. Storing and transmitting these files in raw uncompressed formats consumes excessive hard drive space and overburdens limited network bandwidth.
 
-Existing industrial compression software tools are frequently closed-source, bundle complex external proprietary dependencies, or function as opaque black boxes that do not expose the internal mechanics of entropy reduction. Furthermore, many educational environments lack simple, transparent, and reproducible platforms for demonstrating variable-length entropy coding directly on actual user files.
+In computer systems, users and organizations generate and exchange substantial quantities of uncompressed text documents, source code files, CSV data, log records, and application assets. Storing these files in their raw, fixed 8-bit ASCII representations incurs substantial storage costs and prolongs network transfer latency.
 
-Therefore, there is an evident need for an efficient, transparent, and robust File Compression System centered on the Huffman Coding algorithm, capable of providing verified lossless file reconstruction through an accessible interface.
+Existing commercial and system-level compression utilities (such as gzip, 7-Zip, and WinRAR) are often closed-source, bundle complex proprietary dependencies, or function as opaque black boxes where internal bit-allocation mechanics are hidden from users and researchers. Furthermore, many software tools omit integrated cryptographic hash verification to prove that decompressed files match the original bit-for-bit.
 
+Therefore, there is an evident need for an efficient, transparent, and mathematically rigorous File Compression System based on the Huffman Coding algorithm. The system must provide optimal prefix code compression, self-contained archive packaging, automated SHA-256 data integrity verification, and an intuitive graphical interface.
+
+% ------------------------------------------------------------------------------
+% 3. OBJECTIVES
+% ------------------------------------------------------------------------------
 \section{Objectives}
-The primary objectives of the proposed project are as follows:
+
+The specific objectives of the proposed project are:
 \begin{enumerate}
-    \item \textbf{Lossless Compression}: To develop a fully functional Huffman compression engine capable of compressing arbitrary file formats without losing a single byte of data.
-    \item \textbf{Accurate Decompression}: To implement an inverse tree-traversal decompression engine that reads bitstreams and perfectly reconstructs original files.
-    \item \textbf{Optimal Prefix Encoding}: To utilize a min-heap priority queue for constructing prefix-free binary codes with optimal average codeword length.
-    \item \textbf{Integrity Verification}: To compute and verify cryptographic SHA-256 checksums before compression and after decompression to ensure total data fidelity.
-    \item \textbf{User-Friendly Interface}: To provide an intuitive web-based interface for drag-and-drop file processing, download management, and session activity tracking.
+    \item To design and implement a pure, lossless **Huffman Coding compression engine** that operates on arbitrary file formats without data distortion.
+    \item To implement a min-heap priority queue for optimal bottom-up binary prefix tree synthesis with minimal time complexity.
+    \item To build an efficient bit-packing module that serializes variable-length bit strings into packed 8-bit bytes with self-contained header metadata.
+    \item To construct a robust **decompression engine** that parses archive headers, reconstructs the prefix tree, and faithfully restores original files.
+    \item To integrate automated cryptographic **SHA-256 checksum verification** to guarantee total data integrity.
+    \item To deliver an intuitive, responsive web-based interface providing drag-and-drop file uploads, real-time compression metrics, and file management.
 \end{enumerate}
 
-% ==============================================================================
-% CHAPTER 3: METHODOLOGY & SYSTEM DESIGN
-% ==============================================================================
-\chapter{Methodology}
+% ------------------------------------------------------------------------------
+% 4. METHODOLOGY
+% ------------------------------------------------------------------------------
+\section{Methodology}
 
-\section{Requirement Identification}
+\subsection{Requirement Identification}
 
-\subsection{Study of Existing System}
-An analysis of existing compression utilities reveals that while standard general-purpose utilities (such as gzip, 7-Zip, or WinRAR) achieve high compression ratios, they combine multi-stage algorithms (such as LZ77 dictionary matching with sliding windows followed by dynamic Huffman trees). This multi-stage pipeline makes debugging and educational comprehension complex. A pure, robust implementation of canonical Huffman coding allows direct analysis of symbol probability distribution and prefix code generation without unnecessary complexity.
+\subsubsection{Study of Existing System}
+An investigation into existing file compression software reveals that industrial tools rely on complex, multi-tiered compression pipelines (e.g., LZ77 sliding window dictionary matching coupled with dynamic Huffman trees and Deflate). While efficient for broad commercial workloads, their complexity makes algorithmic inspection difficult and increases runtime overhead. A focused, robust implementation of canonical Huffman coding provides optimal symbol-by-symbol entropy reduction, guaranteed prefix-free decoding, and clear insight into variable-length encoding mechanics.
 
-\subsection{Literature Review}
-\begin{enumerate}
-    \item \textbf{Shannon (1948)}: Formulated the mathematical foundation of communication and proved that the entropy $H(X) = -\sum P(x_i) \log_2 P(x_i)$ represents the absolute theoretical limit for lossless data compaction.
-    \item \textbf{Huffman (1952)}: Published \textit{``A Method for the Construction of Minimum-Redundancy Codes''}, introducing the bottom-up tree generation algorithm using priority queues that guarantees optimal prefix codes for given character probabilities in $O(n \log n)$ time.
-    \item \textbf{Knuth (1985)}: Explored dynamic and static Huffman data structures, demonstrating memory-efficient bit-packing techniques and sequential binary tree traversal mechanisms for digital computers.
-\end{enumerate}
-
-\subsection{Requirement Analysis}
-\subsubsection{Functional Requirements}
+\subsubsection{Literature Review}
 \begin{itemize}
-    \item The system shall read input files in binary stream mode to support both ASCII text and arbitrary binary data.
-    \item The system shall construct byte-frequency tables across 256 possible byte values ($0\text{x}00$ to $0\text{xFF}$).
-    \item The system shall build an optimal binary tree using a priority queue.
-    \item The system shall generate variable-length bit codewords and write packed bitstreams.
-    \item The system shall include self-contained decoding headers in compressed archives.
-    \item The system shall decompress archives and restore files with matching checksums.
+    \item \textbf{C. E. Shannon (1948)}: Established the mathematical foundations of information theory, proving that source entropy $H(X)$ represents the absolute physical lower bound on the average bit length for lossless compression.
+    \item \textbf{D. A. Huffman (1952)}: Introduced the greedy binary tree construction algorithm using priority queues in \textit{``A Method for the Construction of Minimum-Redundancy Codes''}, proving that the resulting prefix-free code achieves the minimum expected codeword length for any independent symbol distribution.
+    \item \textbf{D. E. Knuth (1985)}: Researched efficient dynamic and static tree data structures, bit-level memory buffers, and traversal techniques for real-world computer systems.
+    \item \textbf{T. H. Cormen et al. (2009)}: Provided rigorous proofs for the greedy choice property and optimal substructure of Huffman trees using min-heap priority queues with $O(n \log n)$ construction time.
 \end{itemize}
 
-\subsubsection{Non-Functional Requirements}
+\subsubsection{Requirement Analysis}
 \begin{itemize}
-    \item \textbf{Reliability}: 100\% lossless reconstruction with zero data corruption.
-    \item \textbf{Usability}: Clean, modern, and responsive user interface.
-    \item \textbf{Performance}: Rapid execution for common documents and source files.
-\end{itemize}
-
-\subsubsection{Hardware \& Software Requirements}
-\begin{itemize}
-    \item \textbf{Hardware Requirements}: Minimum 2.0 GHz Dual-Core CPU, 4 GB RAM, 500 MB free hard disk space.
-    \item \textbf{Software Requirements}: Windows 10/11 or Linux OS, Modern Web Browser (Chrome/Firefox/Edge), PHP 8.2+ runtime environment.
-\end{itemize}
-
-\section{Feasibility Study}
-
-\subsection{Technical Feasibility}
-The system utilizes modern PHP for backend processing, HTML5/CSS3/JavaScript for frontend presentation, and SQLite/MySQL for file logging. PHP provides native bitwise operators, stream wrappers, and hash libraries. Modern browsers support high-performance drag-and-drop file APIs. Hence, the project is completely technically feasible.
-
-\subsection{Operational Feasibility}
-The proposed application requires no specialized client-side software installations. Users interact with the platform through any standard web browser. The workflows for compression and decompression are straightforward, requiring only simple file uploads. Therefore, operational feasibility is high.
-
-\subsection{Economic Feasibility}
-The entire software stack comprises free, open-source technologies (PHP, SQLite, standard web specifications). No commercial licensing, proprietary compilers, or dedicated paid server infrastructure is required. The project is economically sound and cost-effective.
-
-\section{High Level Design \& Description of Algorithms}
-
-\subsection{Working Mechanism of Proposed System}
-The working mechanism of the file compression and decompression lifecycle is summarized below:
-\begin{enumerate}
-    \item \textbf{Compression Pipeline}:
+    \item \textbf{Functional Requirements}:
     \begin{itemize}
-        \item Read raw binary data from uploaded file.
-        \item Count frequency of each byte value ($0\text{x}00$ to $0\text{xFF}$).
-        \item Insert leaf nodes into a min-heap priority queue sorted by frequency.
-        \item Repeatedly extract two nodes with the lowest frequencies, create an internal parent node with their combined frequency, and re-insert into the queue until one root node remains.
-        \item Traverse the tree from root to leaf to assign binary prefix codes (left branch = `0', right branch = `1').
-        \item Encode the original byte sequence using the generated variable-length bit codes.
-        \item Pack bits into 8-bit bytes, prepend the frequency header table, and store the output file (`.shuf').
+        \item Binary file stream reading supporting text, code, and generic binary data.
+        \item Byte frequency histogram generation across all 256 byte values ($0\text{x}00$ to $0\text{xFF}$).
+        \item Min-heap priority queue node management and tree synthesis.
+        \item Recursive prefix code generation and bitstream buffer packing.
+        \item Self-contained archive formatting (`.shuf`) with serialized header tables.
+        \item Sequential tree-traversal decompression and SHA-256 integrity verification.
     \end{itemize}
-    \item \textbf{Decompression Pipeline}:
+    \item \textbf{Non-Functional Requirements}:
     \begin{itemize}
-        \item Parse the frequency table header from the `.shuf` file.
-        \item Reconstruct the exact Huffman binary tree.
-        \item Read packed bits sequentially and traverse the tree from root until reaching a leaf node.
-        \item Emit the corresponding original byte and reset traversal to root for the next bits.
-        \item Verify original file size and SHA-256 hash checksum.
+        \item \textbf{Lossless Fidelity}: Zero byte loss during compression-decompression cycles.
+        \item \textbf{Performance}: Rapid execution for common documents and source files.
+        \item \textbf{Usability}: Clean, modern, and responsive user interface requiring no manual command-line configuration.
     \end{itemize}
+    \item \textbf{Hardware \& Software Requirements}:
+    \begin{itemize}
+        \item \textbf{Hardware}: Minimum 2.0 GHz Dual-Core CPU, 4 GB RAM, 500 MB free disk space.
+        \item \textbf{Software}: Windows 10/11 or Linux OS, Modern Web Browser (Chrome/Firefox/Edge), PHP 8.2+ runtime environment.
+    \end{itemize}
+\end{itemize}
+
+\subsection{Feasibility Study}
+
+\subsubsection{Technical Feasibility}
+The system leverages modern PHP 8 for backend algorithmic processing, HTML5/CSS3/JavaScript for frontend presentation, and SQLite/MySQL for file logging. PHP provides native stream handling, bitwise shift operators, and cryptographic hashing functions. Modern web browsers support drag-and-drop file ingestion natively. Thus, the system is fully technically feasible.
+
+\subsubsection{Operational Feasibility}
+The application requires no specialized client-side software or plugins. Users interact with the platform through any standard web browser using intuitive drag-and-drop workflows. Operational feasibility is therefore high.
+
+\subsubsection{Economic Feasibility}
+All technologies utilized in this project (PHP runtime, SQLite database, standard web technologies, and VS Code development tools) are open-source and free of licensing costs. No commercial software purchases or paid cloud hosting subscriptions are required. The project is completely economically feasible.
+
+\subsection{High Level Design \& Description of Algorithms}
+
+\subsubsection{Working Mechanism of Proposed System}
+The working mechanism of the compression and decompression pipeline proceeds through five modular phases:
+\begin{enumerate}
+    \item \textbf{Frequency Profiling}: The raw binary data of the uploaded file is read into memory. An array of 256 counters tallies the exact occurrence of each byte ($0$ to $255$).
+    \item \textbf{Min-Heap Queue Initialization}: For every symbol with non-zero frequency, an individual leaf node is created containing the byte value and its frequency weight. All leaf nodes are inserted into a min-heap priority queue sorted in ascending order of frequency.
+    \item \textbf{Prefix Binary Tree Synthesis}: The algorithm repeatedly extracts the two nodes with the lowest frequencies from the min-heap, creates a new internal node whose frequency is the sum of both children, and re-inserts this internal node into the min-heap. This process repeats until exactly one node remains, which becomes the root of the Huffman tree.
+    \item \textbf{Codeword Assignment}: The tree is traversed recursively from root to leaves. Traversing a left branch appends a `0' bit, while traversing a right branch appends a `1' bit. When a leaf node is reached, its accumulated bit sequence becomes its unique prefix codeword.
+    \item \textbf{Bitstream Packing \& Header Writing}: The original input bytes are translated into their respective variable-length bit codes. These bits are packed sequentially into 8-bit bytes. A self-contained header containing the serialized frequency table and original file metadata is prepended to form the compressed archive (`.shuf`).
+    \item \textbf{Decompression}: The decompressor reads the header dictionary, reconstructs the identical binary tree, and sequentially reads the packed bits. Starting at the root, each bit directs traversal left (`0') or right (`1'). Upon reaching a leaf, the stored character is written to the output stream, and traversal resets to the root. Finally, the SHA-256 hash is computed and verified against the original.
 \end{enumerate}
 
 \begin{figure}[htbp]
 \centering
 \begin{tikzpicture}[
-    node distance=1.2cm and 1.5cm,
-    proc/.style={rectangle, draw=black, fill=gray!10, text width=5.5cm, align=center, minimum height=0.8cm, font=\small},
+    node distance=1.1cm and 1.5cm,
+    proc/.style={rectangle, draw=black, fill=gray!10, text width=6.5cm, align=center, minimum height=0.75cm, font=\small\bfseries},
     arrow/.style={-Latex, thick}
 ]
-    \node (in) [proc, fill=blue!10] {Input File / Byte Stream};
-    \node (freq) [proc, below=of in] {Byte Frequency Analysis ($0$ to $255$)};
-    \node (heap) [proc, below=of freq] {Min-Heap Priority Queue Initialization};
-    \node (tree) [proc, below=of heap] {Binary Huffman Tree Construction};
-    \node (code) [proc, below=of tree] {Codebook Generation (Prefix Bit Codes)};
-    \node (pack) [proc, below=of code] {Bitstream Packing \& Header Writing};
-    \node (out) [proc, below=of pack, fill=green!10] {Output Compressed Archive (`.shuf`)};
+    \node (in) [proc, fill=blue!12] {Input File / Binary Stream};
+    \node (freq) [proc, below=of in] {1. Byte Frequency Counting ($0\text{x}00$ to $0\text{xFF}$)};
+    \node (heap) [proc, below=of freq] {2. Min-Heap Priority Queue Initialization};
+    \node (tree) [proc, below=of heap] {3. Bottom-Up Binary Tree Construction};
+    \node (code) [proc, below=of tree] {4. Prefix Codebook Assignment (0/1)};
+    \node (pack) [proc, below=of code] {5. Bitstream Packing \& Header Serialization};
+    \node (out) [proc, below=of pack, fill=green!15] {Output Compressed File (`.shuf`)};
 
     \draw [arrow] (in) -- (freq);
     \draw [arrow] (freq) -- (heap);
@@ -284,59 +251,100 @@ The working mechanism of the file compression and decompression lifecycle is sum
     \draw [arrow] (code) -- (pack);
     \draw [arrow] (pack) -- (out);
 \end{tikzpicture}
-\caption{High Level Flowchart of Proposed Huffman Compression System}
+\caption{\textbf{High-Level Flowchart of Huffman Compression Pipeline}}
 \label{fig:flowchart}
 \end{figure}
 
-% ==============================================================================
-% CHAPTER 4: GANTT CHART & EXPECTED OUTCOMES
-% ==============================================================================
-\chapter{Project Timeline \& Expected Outcomes}
-
+% ------------------------------------------------------------------------------
+% 5. GANTT CHART (PROJECT TIMELINE)
+% ------------------------------------------------------------------------------
 \section{Gantt Chart (Project Timeline)}
-The proposed project is scheduled for a completion timeline of \textbf{four (4) months}. Table~\ref{tab:gantt} illustrates the work breakdown schedule across the four-month implementation lifecycle.
 
-\begin{table}[htbp]
+The project is structured across a dedicated **four-month development lifecycle** (Month 1 through Month 4). The visual Gantt chart in Figure~\ref{fig:gantt_diagram} depicts the scheduled timeline, work breakdown structure, and milestone progression.
+
+\begin{figure}[htbp]
 \centering
-\caption{Four-Month Project Work Schedule (Gantt Chart)}
-\label{tab:gantt}
-\begin{tabularx}{\textwidth}{lXXXX}
-\toprule
-\textbf{Activity / Milestone} & \textbf{Month 1} & \textbf{Month 2} & \textbf{Month 3} & \textbf{Month 4} \\
-\midrule
-Requirement Gathering \& Feasibility & \textbf{[XXXX]} & & & \\
-Literature Review \& Algorithmic Study & \textbf{[XXXX]} & & & \\
-System Architecture \& Database Design & & \textbf{[XXXX]} & & \\
-Huffman Engine Core Implementation & & \textbf{[XXXX]} & & \\
-Bitstream Packing \& Tree Serialization & & & \textbf{[XXXX]} & \\
-Web Interface \& API Integration & & & \textbf{[XXXX]} & \\
-Lossless Verification \& Testing & & & & \textbf{[XXXX]} \\
-Documentation, Report \& Defense & & & & \textbf{[XXXX]} \\
-\bottomrule
-\end{tabularx}
-\end{table}
+\resizebox{\textwidth}{!}{
+\begin{tikzpicture}[x=0.75cm, y=0.75cm]
+    % Background grid and Months
+    \draw[fill=blue!8, draw=black!40] (0, 7) rectangle (4, 7.8) node[pos=.5, font=\footnotesize\bfseries] {Month 1};
+    \draw[fill=blue!8, draw=black!40] (4, 7) rectangle (8, 7.8) node[pos=.5, font=\footnotesize\bfseries] {Month 2};
+    \draw[fill=blue!8, draw=black!40] (8, 7) rectangle (12, 7.8) node[pos=.5, font=\footnotesize\bfseries] {Month 3};
+    \draw[fill=blue!8, draw=black!40] (12, 7) rectangle (16, 7.8) node[pos=.5, font=\footnotesize\bfseries] {Month 4};
+    
+    % Sub-grid week lines
+    \foreach \x in {0, 1, 2, ..., 16} {
+        \draw[dotted, black!25] (\x, 0) -- (\x, 7);
+    }
+    
+    % Task 1: Requirement Gathering & Literature Review
+    \node[anchor=east, font=\scriptsize\bfseries] at (-0.2, 6.4) {1. Requirements \& Literature Review};
+    \draw[fill=blue!60, draw=blue!90, rounded corners=2pt] (0, 6.1) rectangle (4, 6.7);
+    
+    % Task 2: Feasibility Study & Architecture Design
+    \node[anchor=east, font=\scriptsize\bfseries] at (-0.2, 5.2) {2. Feasibility \& System Design};
+    \draw[fill=teal!60, draw=teal!90, rounded corners=2pt] (2, 4.9) rectangle (6, 5.5);
+    
+    % Task 3: Huffman Engine Core & Min-Heap Tree
+    \node[anchor=east, font=\scriptsize\bfseries] at (-0.2, 4.0) {3. Huffman Engine \& Min-Heap};
+    \draw[fill=cyan!60, draw=cyan!90, rounded corners=2pt] (4, 3.7) rectangle (9, 4.3);
+    
+    % Task 4: Bit Packing & Archive Serialization
+    \node[anchor=east, font=\scriptsize\bfseries] at (-0.2, 2.8) {4. Bit Packing \& Serialization};
+    \draw[fill=orange!60, draw=orange!90, rounded corners=2pt] (7, 2.5) rectangle (11, 3.1);
+    
+    % Task 5: Web Dashboard & Decompressor Integration
+    \node[anchor=east, font=\scriptsize\bfseries] at (-0.2, 1.6) {5. Web Interface \& Decompressor};
+    \draw[fill=purple!50, draw=purple!80, rounded corners=2pt] (9, 1.3) rectangle (13, 1.9);
+    
+    % Task 6: Testing, Lossless Verification & Defense
+    \node[anchor=east, font=\scriptsize\bfseries] at (-0.2, 0.4) {6. Testing, Report \& Final Defense};
+    \draw[fill=green!60!black!60, draw=green!70!black, rounded corners=2pt] (12, 0.1) rectangle (16, 0.7);
+    
+    % Horizontal Axis Base
+    \draw[thick, black!60] (0, 0) -- (16, 0);
+    \foreach \x in {0, 4, 8, 12, 16} {
+        \draw[thick, black!60] (\x, 0) -- (\x, -0.2);
+    }
+    \node[below, font=\tiny\bfseries] at (0, -0.2) {W0};
+    \node[below, font=\tiny\bfseries] at (4, -0.2) {W4};
+    \node[below, font=\tiny\bfseries] at (8, -0.2) {W8};
+    \node[below, font=\tiny\bfseries] at (12, -0.2) {W12};
+    \node[below, font=\tiny\bfseries] at (16, -0.2) {W16};
+\end{tikzpicture}
+}
+\caption{\textbf{Four-Month Project Timeline Diagram (Gantt Chart)}}
+\label{fig:gantt_diagram}
+\end{figure}
 
-\section{Expected Outcomes}
-Upon completion of this project, the following deliverables and outcomes are anticipated:
+% ------------------------------------------------------------------------------
+% 6. EXPECTED OUTCOME
+% ------------------------------------------------------------------------------
+\section{Expected Outcome}
+
+Upon successful completion of the proposed four-month project, the following concrete deliverables and technical outcomes will be produced:
 \begin{enumerate}
-    \item A fully working, lossless file compression and decompression software tool implementing Huffman entropy coding.
-    \item Documented size reductions ranging from 20\% to 60\% on text documents, source code, and structured log files.
-    \item Perfect file restoration confirmed through automated SHA-256 hash comparison.
-    \item An intuitive, web-based graphical interface for effortless drag-and-drop user interaction.
-    \item Complete technical documentation and source code repository available for academic evaluation.
+    \item \textbf{Lossless Compression Engine}: A fully functional implementation of canonical Huffman coding that performs prefix tree synthesis and variable-length bit packing.
+    \item \textbf{Proven Storage Savings}: Measurable data volume reductions ranging from 20\% to 60\% on uncompressed plain text documents, JSON/CSV datasets, configuration logs, and source code files.
+    \item \textbf{Verified Data Integrity}: Automated pre- and post-compression SHA-256 cryptographic verification ensuring exact bit-for-bit file reconstruction.
+    \item \textbf{Accessible Web Application}: A responsive, user-friendly graphical dashboard enabling single-click file compression, decompression, download, and file management.
+    \item \textbf{Complete Academic Package}: Comprehensive technical project documentation, clean source code repository, and presentation materials for academic defense.
 \end{enumerate}
 
-% ==============================================================================
-% CHAPTER 5: CONCLUSION & REFERENCES
-% ==============================================================================
-\chapter{Conclusion \& References}
-
+% ------------------------------------------------------------------------------
+% 7. CONCLUSION
+% ------------------------------------------------------------------------------
 \section{Conclusion}
-Data compression continues to serve as an indispensable pillar of modern digital communications and storage architecture. This project proposal establishes the technical blueprint for developing an accessible, reliable, and mathematically verified \textbf{File Compression System} grounded in the principles of \textbf{Huffman Coding}.
 
-By focusing strictly on Huffman entropy encoding, the system eliminates unnecessary complexity while delivering optimal prefix code construction, rigorous lossless restoration, and user-friendly interaction. The planned four-month execution schedule ensures orderly progression from theoretical analysis to full implementation, empirical verification, and academic delivery.
+Data compression remains a cornerstone of efficient digital storage and high-speed communication systems. This project proposal establishes a clear, rigorous engineering roadmap for constructing a **File Compression System Using Huffman Coding**.
 
+By eliminating unnecessary multi-layer complexity and focusing strictly on Huffman entropy encoding, the system achieves optimal prefix-free code synthesis, verified lossless reconstruction, and transparent operational mechanics. The proposed four-month Gantt timeline ensures systematic progress across requirement analysis, algorithmic implementation, empirical testing, and final academic presentation.
+
+% ------------------------------------------------------------------------------
+% 8. REFERENCES
+% ------------------------------------------------------------------------------
 \section{References}
+
 \begin{enumerate}
     \item D. A. Huffman, ``A Method for the Construction of Minimum-Redundancy Codes,'' \textit{Proceedings of the IRE}, vol. 40, no. 9, pp. 1098--1101, Sept. 1952.
     \item C. E. Shannon, ``A Mathematical Theory of Communication,'' \textit{Bell System Technical Journal}, vol. 27, no. 3, pp. 379--423, July 1948.
