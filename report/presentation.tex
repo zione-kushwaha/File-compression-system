@@ -11,7 +11,8 @@
 \setbeamercolor{palette primary}{bg=primaryblue,fg=white}
 \setbeamercolor{palette secondary}{bg=accentteal,fg=white}
 \setbeamercolor{palette tertiary}{bg=darkslate,fg=white}
-\setbeamercolor{titlelike}{parent=palette primary,fg=primaryblue}
+\setbeamercolor{title}{bg=primaryblue,fg=white}
+\setbeamercolor{titlelike}{bg=primaryblue,fg=white}
 \setbeamercolor{structure}{fg=primaryblue}
 \setbeamercolor{block title}{bg=primaryblue!15,fg=primaryblue}
 \setbeamercolor{block body}{bg=gray!8,fg=black}
@@ -39,19 +40,26 @@
 \usepackage{tikz}
 \usetikzlibrary{shapes.geometric,arrows.meta,positioning,calc}
 
-\title[File Compression System]{\textbf{File Compression System Using Huffman Coding}}
-\subtitle{Project Proposal Defense Presentation}
-\author{\textbf{Aarti Kushwaha}}
-\institute{2026}
-\date{2026}
-
 \begin{document}
 
 % -----------------------------------------------------------------------------
 % SLIDE 1: TITLE SLIDE
 % -----------------------------------------------------------------------------
-\begin{frame}
-    \titlepage
+\begin{frame}[plain]
+    \centering
+    \vspace*{0.8cm}
+    
+    {\fontsize{19}{25}\selectfont \textbf{\color{primaryblue} File Compression System Using Huffman Coding}\par}
+    \vspace{0.4cm}
+    {\fontsize{13}{18}\selectfont \color{darkslate} Project Proposal Defense Presentation\par}
+    \vspace{1.2cm}
+    
+    {\fontsize{14}{18}\selectfont \textbf{Presented By:}\\[0.25cm]
+    {\fontsize{16}{20}\selectfont \textbf{Aarti Kushwaha}}\par}
+    
+    \vfill
+    {\fontsize{13}{17}\selectfont \textbf{2026}\par}
+    \vspace*{0.4cm}
 \end{frame}
 
 % -----------------------------------------------------------------------------
