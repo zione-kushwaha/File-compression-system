@@ -18,6 +18,22 @@
 
 \setbeamertemplate{navigation symbols}{}
 
+% Clean footline without B.Tech
+\setbeamertemplate{footline}{
+  \leavevmode%
+  \hbox{%
+  \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,left]{author in head/foot}%
+    \hspace*{2ex}\usebeamerfont{author in head/foot}\textbf{Aarti Kushwaha}
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}%
+    \usebeamerfont{title in head/foot}File Compression System
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,right]{date in head/foot}%
+    \usebeamerfont{date in head/foot}\insertframenumber{} / \inserttotalframenumber\hspace*{2ex}
+  \end{beamercolorbox}}%
+  \vskip0pt%
+}
+
 \usepackage{booktabs}
 \usepackage{tabularx}
 \usepackage{tikz}
@@ -26,8 +42,8 @@
 \title[File Compression System]{\textbf{File Compression System Using Huffman Coding}}
 \subtitle{Project Proposal Defense Presentation}
 \author{\textbf{Aarti Kushwaha}}
-\institute[B.Tech]{Bachelor of Technology\\Department of Computer Science \& Engineering}
-\date{Academic Session 2025--2026}
+\institute{Academic Session 2025--2026}
+\date{}
 
 \begin{document}
 
