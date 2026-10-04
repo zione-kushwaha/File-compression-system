@@ -59,46 +59,42 @@
 % ==============================================================================
 \begin{titlepage}
     \centering
-    \vspace*{0.1cm}
+    \vspace*{0.3cm}
     
     % Tribhuvan University Official Emblem
-    \includegraphics[width=2.3cm]{tu_logo.png}
+    \includegraphics[width=2.5cm]{tu_logo.png}
     
-    \vspace{0.3cm}
-    {\fontsize{15}{18}\selectfont \textbf{Tribhuvan University}\par}
-    \vspace{0.12cm}
-    {\fontsize{13}{16}\selectfont \textbf{Faculty of Humanities and Social Sciences}\par}
+    \vspace{0.4cm}
+    {\fontsize{16}{20}\selectfont \textbf{Tribhuvan University}\par}
     
-    \vspace{0.9cm}
-    {\fontsize{16}{20}\selectfont \textbf{FILE COMPRESSION SYSTEM USING HUFFMAN CODING}\par}
-    \vspace{0.3cm}
-    {\fontsize{13}{16}\selectfont \textbf{A PROJECT PROPOSAL REPORT}\par}
+    \vspace{1.5cm}
+    {\fontsize{16}{22}\selectfont \textbf{FILE COMPRESSION SYSTEM USING HUFFMAN CODING}\par}
+    \vspace{0.4cm}
+    {\fontsize{13}{18}\selectfont \textbf{A PROJECT PROPOSAL REPORT}\par}
     
-    \vspace{0.8cm}
-    {\fontsize{12}{15}\selectfont Submitted to\par}
-    \vspace{0.15cm}
-    {\fontsize{13}{16}\selectfont \textbf{Department of Computer Application}\par}
-    {\fontsize{13}{16}\selectfont \textbf{Academia International College}\par}
-    {\fontsize{12}{15}\selectfont Gwarko, Lalitpur\par}
+    \vspace{1.3cm}
+    {\fontsize{12}{16}\selectfont Submitted to\par}
+    \vspace{0.2cm}
+    {\fontsize{13}{18}\selectfont \textbf{Department of Computer Application}\par}
+    {\fontsize{13}{18}\selectfont \textbf{Academia International College}\par}
+    {\fontsize{12}{16}\selectfont Gwarko, Lalitpur\par}
     
-    \vspace{0.8cm}
-    {\fontsize{12}{16}\selectfont \textbf{In partial fulfillment of the requirements for the Bachelor in Computer Application}\par}
+    \vspace{1.3cm}
+    {\fontsize{12}{17}\selectfont \textbf{In partial fulfillment of the requirements for the Bachelor in Computer Application}\par}
     
-    \vspace{0.8cm}
-    {\fontsize{12}{15}\selectfont Submitted by:\par}
-    \vspace{0.15cm}
-    {\fontsize{13}{16}\selectfont \textbf{Aarti Kumari Kushwaha}\par}
-    \vspace{0.1cm}
-    {\fontsize{11}{14}\selectfont T.U. Regd. No.: \underline{\hspace{4.0cm}} \quad Symbol No.: \underline{\hspace{3.0cm}}\par}
+    \vspace{1.2cm}
+    {\fontsize{12}{16}\selectfont Submitted by:\par}
+    \vspace{0.2cm}
+    {\fontsize{14}{18}\selectfont \textbf{Aarti Kumari Kushwaha}\par}
     
-    \vspace{0.8cm}
-    {\fontsize{12}{15}\selectfont Under the supervisor\par}
-    \vspace{0.15cm}
-    {\fontsize{13}{16}\selectfont \textbf{Biswash Mathema}\par}
+    \vspace{1.2cm}
+    {\fontsize{12}{16}\selectfont Under the supervisor\par}
+    \vspace{0.2cm}
+    {\fontsize{13}{18}\selectfont \textbf{Biswash Mathema}\par}
     
     \vfill
-    {\fontsize{12}{15}\selectfont \textbf{2026}\par}
-    \vspace*{0.1cm}
+    {\fontsize{12}{16}\selectfont \textbf{2026}\par}
+    \vspace*{0.3cm}
 \end{titlepage}
 
 % ==============================================================================
@@ -138,7 +134,7 @@ The scope of the proposed project encompasses the following engineering mileston
     \item \textbf{Self-Contained Archive Architecture}: Embedding the serialized frequency codebook header directly into the compressed archive (`.shuf`) so that decompression requires no external dictionary files.
     \item \textbf{Lossless Decompression Engine}: Ingestion of packed archives, reconstruction of the binary prefix tree, sequential bit traversal, and byte-for-byte original file restoration.
     \item \textbf{Cryptographic Integrity Verification}: Pre- and post-compression SHA-256 hash comparison to mathematically certify 100\% lossless fidelity.
-    \item \textbf{Interactive Web Dashboard}: A clean, responsive user interface facilitating drag-and-drop file upload, download of compressed archives, and activity session tracking.
+    \item \textbf{Interactive Web Interface}: A clean, responsive user interface facilitating drag-and-drop file upload, single-click compression/decompression, and file download.
 \end{enumerate}
 
 \subsection{Limitations}
@@ -220,13 +216,13 @@ An investigation into existing file compression software reveals that industrial
 \subsection{Feasibility Study}
 
 \subsubsection{Technical Feasibility}
-The system leverages modern PHP 8 for backend algorithmic processing, HTML5/CSS3/JavaScript for frontend presentation, and SQLite/MySQL for file logging. PHP provides native stream handling, bitwise shift operators, and cryptographic hashing functions. Modern web browsers support drag-and-drop file ingestion natively. Thus, the system is fully technically feasible.
+The system leverages modern PHP 8 for backend algorithmic processing, HTML5/CSS3/JavaScript for frontend presentation, and native binary file streaming. PHP provides built-in memory stream handling, bitwise shift operators, and cryptographic hashing functions. Modern web browsers support drag-and-drop file ingestion natively. Thus, the system is fully technically feasible.
 
 \subsubsection{Operational Feasibility}
 The application requires no specialized client-side software or plugins. Users interact with the platform through any standard web browser using intuitive drag-and-drop workflows. Operational feasibility is therefore high.
 
 \subsubsection{Economic Feasibility}
-All technologies utilized in this project (PHP runtime, SQLite database, standard web technologies, and VS Code development tools) are open-source and free of licensing costs. No commercial software purchases or paid cloud hosting subscriptions are required. The project is completely economically feasible.
+All technologies utilized in this project (PHP runtime environment, modern web browser standards, and open-source development tools) are free of licensing costs. No commercial software purchases or paid cloud hosting subscriptions are required. The project is completely economically feasible.
 
 \subsection{High Level Design of System}
 
@@ -245,65 +241,61 @@ The working mechanism of the compression and decompression pipeline proceeds thr
 \end{enumerate}
 
 \subsubsection{Flowchart of Proposed System}
-The operational workflow of the proposed system is depicted in Figure~\ref{fig:system_flowchart}. The diagram follows standard software engineering conventions, incorporating user authentication, task branch decisions, algorithmic stages for both compression and decompression, and terminal termination.
+The operational workflow of the proposed Huffman File Compression System is depicted in Figure~\ref{fig:system_flowchart}. The flowchart illustrates the complete algorithmic pipeline for both compression and decompression, including file ingestion, byte frequency analysis, min-heap priority queue construction, binary prefix tree traversal, bitstream packing, archive serialization, and lossless verification.
 
-\vspace{0.4cm}
+\vspace{0.3cm}
 \begin{center}
 \begin{tikzpicture}[
-    node distance=1.1cm and 1.6cm,
-    startstop/.style={ellipse, draw=black, thick, fill=gray!12, text width=2.4cm, align=center, minimum height=0.7cm, font=\footnotesize\bfseries},
-    process/.style={rectangle, draw=black, thick, fill=white, text width=3.8cm, align=center, minimum height=0.75cm, font=\scriptsize},
-    decision/.style={diamond, draw=black, thick, fill=white, text width=2.1cm, align=center, aspect=1.8, inner sep=1pt, font=\scriptsize\bfseries},
+    xscale=1.0, yscale=0.88,
+    startstop/.style={ellipse, draw=black, thick, fill=gray!15, text width=2.4cm, align=center, minimum height=0.65cm, font=\footnotesize\bfseries},
+    process/.style={rectangle, draw=black, thick, fill=white, text width=3.8cm, align=center, minimum height=0.68cm, font=\scriptsize},
+    decision/.style={diamond, draw=black, thick, fill=white, text width=2.2cm, align=center, aspect=1.8, inner sep=1pt, font=\scriptsize\bfseries},
     arrow/.style={-Latex, thick}
 ]
-    % Central Login Column
-    \node (start) [startstop] {Start};
-    \node (login) [process, below=0.8cm of start] {User Access / Login};
-    \node (auth) [decision, below=0.8cm of login] {Is user\\registered?};
-    \node (backlogin) [process, right=1.4cm of auth, text width=2.6cm] {Back to login / Register};
-    \node (panel) [process, below=0.9cm of auth, text width=4.2cm, fill=blue!8] {Main Dashboard Panel};
-    \node (action) [decision, below=0.8cm of panel] {Select\\Operation?};
+    % Central Entry
+    \node (start) [startstop] at (0, 0) {Start};
+    \node (input) [process] at (0, -1.0) {Load Source File};
+    \node (mode) [decision] at (0, -2.3) {Operation\\Mode?};
 
-    % Left Branch: Compression Pipeline
-    \node (comp_up) [process, below left=1.0cm and 0.5cm of action, text width=3.4cm] {Upload Source File};
-    \node (comp_freq) [process, below=0.6cm of comp_up, text width=3.4cm] {Count Byte Frequencies};
-    \node (comp_tree) [process, below=0.6cm of comp_freq, text width=3.4cm] {Build Min-Heap \& Huffman Tree};
-    \node (comp_pack) [process, below=0.6cm of comp_tree, text width=3.4cm] {Pack Bitstream \& Save `.shuf`};
+    % Left Column: Compression Pipeline
+    \node (c_freq) [process] at (-3.7, -3.8) {1. Byte Frequency Count\\($0\text{x}00$ to $0\text{xFF}$)};
+    \node (c_heap) [process] at (-3.7, -5.0) {2. Build Min-Heap Queue\\(Ascending Frequency)};
+    \node (c_tree) [process] at (-3.7, -6.2) {3. Construct Huffman Tree\\(Merge 2 Lowest Nodes)};
+    \node (c_code) [process] at (-3.7, -7.4) {4. Extract Prefix Codewords\\(Left: '0', Right: '1')};
+    \node (c_pack) [process] at (-3.7, -8.6) {5. Pack Bits into Bytes \&\\Write Header to '.shuf'};
 
-    % Right Branch: Decompression Pipeline
-    \node (decomp_up) [process, below right=1.0cm and 0.5cm of action, text width=3.4cm] {Upload `.shuf` Archive};
-    \node (decomp_head) [process, below=0.6cm of decomp_up, text width=3.4cm] {Read Header \& Rebuild Tree};
-    \node (decomp_decode) [process, below=0.6cm of decomp_head, text width=3.4cm] {Decode Packed Bitstream};
-    \node (decomp_verify) [process, below=0.6cm of decomp_decode, text width=3.4cm] {Verify SHA-256 Checksum};
+    % Right Column: Decompression Pipeline
+    \node (d_head) [process] at (3.7, -3.8) {1. Parse Archive Header\\(Extract Codebook)};
+    \node (d_tree) [process] at (3.7, -5.0) {2. Reconstruct Binary\\Huffman Prefix Tree};
+    \node (d_deco) [process] at (3.7, -6.2) {3. Decode Packed Bits via\\Sequential Tree Traversal};
+    \node (d_hash) [process] at (3.7, -7.4) {4. Verify SHA-256 Checksum\\for Exact Integrity};
+    \node (d_save) [process] at (3.7, -8.6) {5. Write Restored Original\\Uncompressed File};
 
-    % Convergence and End
-    \node (result) [process, below=4.2cm of action, text width=5.2cm, fill=green!10] {Display Metrics \& Download File};
-    \node (end) [startstop, below=0.8cm of result] {Log out / End};
+    % Bottom Convergence
+    \node (output) [process, fill=green!12, text width=5.6cm] at (0, -10.0) {Display Compression Metrics\\\& Provide Download};
+    \node (end) [startstop] at (0, -11.1) {End / Stop};
 
     % Arrows
-    \draw [arrow] (start) -- (login);
-    \draw [arrow] (login) -- (auth);
-    \draw [arrow] (auth) -- node[above, font=\tiny\bfseries] {No} (backlogin);
-    \draw [arrow] (backlogin) |- (login);
-    \draw [arrow] (auth) -- node[right, font=\tiny\bfseries] {Yes} (panel);
-    \draw [arrow] (panel) -- (action);
+    \draw [arrow] (start) -- (input);
+    \draw [arrow] (input) -- (mode);
 
-    % Action branches
-    \draw [arrow] (action) -| node[above, near start, font=\tiny\bfseries] {Compression} (comp_up);
-    \draw [arrow] (comp_up) -- (comp_freq);
-    \draw [arrow] (comp_freq) -- (comp_tree);
-    \draw [arrow] (comp_tree) -- (comp_pack);
-    \draw [arrow] (comp_pack) |- (result);
+    \draw [arrow] (mode) -| node[above, near start, font=\scriptsize\bfseries] {Compression} (c_freq.north);
+    \draw [arrow] (c_freq) -- (c_heap);
+    \draw [arrow] (c_heap) -- (c_tree);
+    \draw [arrow] (c_tree) -- (c_code);
+    \draw [arrow] (c_code) -- (c_pack);
+    \draw [arrow] (c_pack.south) -- ++(0,-0.4) -| (output.west);
 
-    \draw [arrow] (action) -| node[above, near start, font=\tiny\bfseries] {Decompression} (decomp_up);
-    \draw [arrow] (decomp_up) -- (decomp_head);
-    \draw [arrow] (decomp_head) -- (decomp_decode);
-    \draw [arrow] (decomp_decode) -- (decomp_verify);
-    \draw [arrow] (decomp_verify) |- (result);
+    \draw [arrow] (mode) -| node[above, near start, font=\scriptsize\bfseries] {Decompression} (d_head.north);
+    \draw [arrow] (d_head) -- (d_tree);
+    \draw [arrow] (d_tree) -- (d_deco);
+    \draw [arrow] (d_deco) -- (d_hash);
+    \draw [arrow] (d_hash) -- (d_save);
+    \draw [arrow] (d_save.south) -- ++(0,-0.4) -| (output.east);
 
-    \draw [arrow] (result) -- (end);
+    \draw [arrow] (output) -- (end);
 \end{tikzpicture}
-\captionof{figure}{\textbf{System Flowchart of the Proposed File Compression System}}
+\captionof{figure}{\textbf{Flowchart of the Proposed Huffman Compression and Decompression System}}
 \label{fig:system_flowchart}
 \end{center}
 
