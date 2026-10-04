@@ -1,8 +1,9 @@
 \documentclass[12pt,a4paper]{article}
 
 \usepackage[utf8]{inputenc}
-\usepackage[a4paper, top=1in, bottom=1in, right=1in, left=1.25in]{geometry}
-\usepackage{mathptmx} % Times New Roman font
+\usepackage[T1]{fontenc}
+\usepackage{times} % Standard Times-Roman and Times-Bold
+\usepackage[a4paper, left=1in, right=1in, top=1in, bottom=1in]{geometry}
 \usepackage{setspace}
 \setstretch{1.5} % 1.5 line spacing
 \usepackage{amsmath,amssymb}
@@ -14,7 +15,7 @@
 \usepackage[font={bf,normalsize},labelfont=bf,justification=centering]{caption}
 \usepackage{hyperref}
 \usepackage{tikz}
-\usetikzlibrary{shapes.geometric,arrows.meta,positioning,calc,patterns}
+\usetikzlibrary{shapes.geometric,arrows.meta,positioning,calc}
 
 % Justified text alignment
 \hyphenpenalty=1000
@@ -33,15 +34,15 @@
 % Sub-headings: 14pt Bold
 % Sub-sub-headings: 12pt Bold
 \titleformat{\section}
-  {\normalfont\fontsize{16}{20}\bfseries}{\thesection.}{0.8em}{}
+  {\normalfont\fontsize{16}{20}\selectfont\bfseries}{\thesection.}{0.8em}{}
 \titlespacing*{\section}{0pt}{18pt}{8pt}
 
 \titleformat{\subsection}
-  {\normalfont\fontsize{14}{18}\bfseries}{\thesubsection}{0.8em}{}
+  {\normalfont\fontsize{14}{18}\selectfont\bfseries}{\thesubsection}{0.8em}{}
 \titlespacing*{\subsection}{0pt}{14pt}{6pt}
 
 \titleformat{\subsubsection}
-  {\normalfont\fontsize{12}{16}\bfseries}{\thesubsubsection}{0.8em}{}
+  {\normalfont\fontsize{12}{16}\selectfont\bfseries}{\thesubsubsection}{0.8em}{}
 \titlespacing*{\subsubsection}{0pt}{10pt}{4pt}
 
 \hypersetup{
@@ -58,35 +59,38 @@
 % ==============================================================================
 \begin{titlepage}
     \centering
-    \vspace*{0.5cm}
+    \vspace*{0.8cm}
     
-    {\fontsize{16}{22}\bfseries A PROJECT PROPOSAL\par}
-    \vspace{0.6cm}
-    {\fontsize{14}{18}\bfseries ON\par}
-    \vspace{0.6cm}
-    {\fontsize{16}{22}\bfseries FILE COMPRESSION SYSTEM USING HUFFMAN CODING\par}
+    {\fontsize{20}{26}\selectfont \textbf{A PROJECT PROPOSAL}\par}
+    \vspace{0.8cm}
+    {\fontsize{14}{18}\selectfont \textbf{ON}\par}
+    \vspace{0.8cm}
+    {\fontsize{20}{26}\selectfont \textbf{FILE COMPRESSION SYSTEM USING HUFFMAN CODING}\par}
     \vspace{2.2cm}
     
-    {\fontsize{12}{18}\selectfont A Project Proposal Submitted in Partial Fulfillment of the\\
-    Requirements for the Degree of Bachelor of Technology\par}
-    \vspace{3.5cm}
+    {\fontsize{13}{18}\selectfont \textbf{A Project Proposal Submitted in Partial Fulfillment of the\\
+    Requirements for the Degree of Bachelor of Technology}\par}
     
-    \begin{minipage}{0.45\textwidth}
+    % Push the Submitted By / Under the Guidance block to the bottom of the page
+    \vfill
+    
+    \begin{minipage}{0.48\textwidth}
         \begin{flushleft}
-            {\fontsize{12}{16}\bfseries Submitted By:}\\[0.3cm]
-            {\fontsize{12}{16}\bfseries Aarti Kushwaha}
+            {\fontsize{13}{18}\selectfont \textbf{Submitted By:}}\\[0.3cm]
+            {\fontsize{13}{18}\selectfont \textbf{Aarti Kushwaha}}
         \end{flushleft}
     \end{minipage}
     \hfill
-    \begin{minipage}{0.45\textwidth}
+    \begin{minipage}{0.48\textwidth}
         \begin{flushright}
-            {\fontsize{12}{16}\bfseries Under the Guidance of:}\\[0.3cm]
-            {\fontsize{12}{16}\bfseries Project Supervisor}
+            {\fontsize{13}{18}\selectfont \textbf{Under the Guidance of:}}\\[0.3cm]
+            {\fontsize{13}{18}\selectfont \textbf{Project Supervisor}}
         \end{flushright}
     \end{minipage}
     
-    \vfill
-    {\fontsize{12}{16}\bfseries Academic Session 2025--2026\par}
+    \vspace{1.8cm}
+    {\fontsize{13}{18}\selectfont \textbf{Academic Session 2025--2026}\par}
+    \vspace*{0.5cm}
 \end{titlepage}
 
 % ==============================================================================
@@ -155,11 +159,11 @@ Therefore, there is an evident need for an efficient, transparent, and mathemati
 
 The specific objectives of the proposed project are:
 \begin{enumerate}
-    \item To design and implement a pure, lossless **Huffman Coding compression engine** that operates on arbitrary file formats without data distortion.
+    \item To design and implement a pure, lossless \textbf{Huffman Coding compression engine} that operates on arbitrary file formats without data distortion.
     \item To implement a min-heap priority queue for optimal bottom-up binary prefix tree synthesis with minimal time complexity.
     \item To build an efficient bit-packing module that serializes variable-length bit strings into packed 8-bit bytes with self-contained header metadata.
-    \item To construct a robust **decompression engine** that parses archive headers, reconstructs the prefix tree, and faithfully restores original files.
-    \item To integrate automated cryptographic **SHA-256 checksum verification** to guarantee total data integrity.
+    \item To construct a robust \textbf{decompression engine} that parses archive headers, reconstructs the prefix tree, and faithfully restores original files.
+    \item To integrate automated cryptographic \textbf{SHA-256 checksum verification} to guarantee total data integrity.
     \item To deliver an intuitive, responsive web-based interface providing drag-and-drop file uploads, real-time compression metrics, and file management.
 \end{enumerate}
 
@@ -229,20 +233,20 @@ The working mechanism of the compression and decompression pipeline proceeds thr
     \item \textbf{Decompression}: The decompressor reads the header dictionary, reconstructs the identical binary tree, and sequentially reads the packed bits. Starting at the root, each bit directs traversal left (`0') or right (`1'). Upon reaching a leaf, the stored character is written to the output stream, and traversal resets to the root. Finally, the SHA-256 hash is computed and verified against the original.
 \end{enumerate}
 
-\begin{figure}[htbp]
-\centering
+\vspace{0.4cm}
+\begin{center}
 \begin{tikzpicture}[
-    node distance=1.1cm and 1.5cm,
-    proc/.style={rectangle, draw=black, fill=gray!10, text width=6.5cm, align=center, minimum height=0.75cm, font=\small\bfseries},
+    node distance=0.9cm and 1.5cm,
+    proc/.style={rectangle, draw=black, fill=gray!8, text width=9.0cm, align=center, minimum height=0.75cm, font=\small\bfseries},
     arrow/.style={-Latex, thick}
 ]
     \node (in) [proc, fill=blue!12] {Input File / Binary Stream};
     \node (freq) [proc, below=of in] {1. Byte Frequency Counting ($0\text{x}00$ to $0\text{xFF}$)};
     \node (heap) [proc, below=of freq] {2. Min-Heap Priority Queue Initialization};
     \node (tree) [proc, below=of heap] {3. Bottom-Up Binary Tree Construction};
-    \node (code) [proc, below=of tree] {4. Prefix Codebook Assignment (0/1)};
+    \node (code) [proc, below=of tree] {4. Prefix Codebook Assignment (0 / 1)};
     \node (pack) [proc, below=of code] {5. Bitstream Packing \& Header Serialization};
-    \node (out) [proc, below=of pack, fill=green!15] {Output Compressed File (`.shuf`)};
+    \node (out) [proc, below=of pack, fill=green!15] {Output Compressed Archive (`.shuf`)};
 
     \draw [arrow] (in) -- (freq);
     \draw [arrow] (freq) -- (heap);
@@ -251,71 +255,74 @@ The working mechanism of the compression and decompression pipeline proceeds thr
     \draw [arrow] (code) -- (pack);
     \draw [arrow] (pack) -- (out);
 \end{tikzpicture}
-\caption{\textbf{High-Level Flowchart of Huffman Compression Pipeline}}
+\captionof{figure}{\textbf{High-Level Flowchart of Huffman Compression Pipeline}}
 \label{fig:flowchart}
-\end{figure}
+\end{center}
 
 % ------------------------------------------------------------------------------
 % 5. GANTT CHART (PROJECT TIMELINE)
 % ------------------------------------------------------------------------------
 \section{Gantt Chart (Project Timeline)}
 
-The project is structured across a dedicated **four-month development lifecycle** (Month 1 through Month 4). The visual Gantt chart in Figure~\ref{fig:gantt_diagram} depicts the scheduled timeline, work breakdown structure, and milestone progression.
+The project is structured across a dedicated \textbf{four-month development lifecycle} (Month 1 through Month 4). The visual Gantt chart in Figure~\ref{fig:gantt_diagram} depicts the scheduled timeline, work breakdown structure, and milestone progression, spanning from week 1 through week 16 across the 4 months.
 
-\begin{figure}[htbp]
-\centering
-\resizebox{\textwidth}{!}{
-\begin{tikzpicture}[x=0.75cm, y=0.75cm]
-    % Background grid and Months
-    \draw[fill=blue!8, draw=black!40] (0, 7) rectangle (4, 7.8) node[pos=.5, font=\footnotesize\bfseries] {Month 1};
-    \draw[fill=blue!8, draw=black!40] (4, 7) rectangle (8, 7.8) node[pos=.5, font=\footnotesize\bfseries] {Month 2};
-    \draw[fill=blue!8, draw=black!40] (8, 7) rectangle (12, 7.8) node[pos=.5, font=\footnotesize\bfseries] {Month 3};
-    \draw[fill=blue!8, draw=black!40] (12, 7) rectangle (16, 7.8) node[pos=.5, font=\footnotesize\bfseries] {Month 4};
+\vspace{0.3cm}
+\begin{center}
+\begin{tikzpicture}[x=0.96cm, y=0.72cm]
+    % Header Months spanning exact full width (15.6 cm total)
+    \draw[fill=blue!10, draw=black!40] (0, 7) rectangle (2.4, 7.8) node[pos=.5, font=\footnotesize\bfseries] {Month 1};
+    \draw[fill=blue!10, draw=black!40] (2.4, 7) rectangle (4.8, 7.8) node[pos=.5, font=\footnotesize\bfseries] {Month 2};
+    \draw[fill=blue!10, draw=black!40] (4.8, 7) rectangle (7.2, 7.8) node[pos=.5, font=\footnotesize\bfseries] {Month 3};
+    \draw[fill=blue!10, draw=black!40] (7.2, 7) rectangle (9.6, 7.8) node[pos=.5, font=\footnotesize\bfseries] {Month 4};
     
-    % Sub-grid week lines
-    \foreach \x in {0, 1, 2, ..., 16} {
-        \draw[dotted, black!25] (\x, 0) -- (\x, 7);
+    % Sub-grid vertical week lines
+    \foreach \x in {0, 0.6, ..., 9.6} {
+        \draw[dotted, black!20] (\x, 0) -- (\x, 7);
     }
     
-    % Task 1: Requirement Gathering & Literature Review
+    % Major Month boundary lines
+    \foreach \x in {2.4, 4.8, 7.2} {
+        \draw[dashed, black!40] (\x, 0) -- (\x, 7);
+    }
+    
+    % Task 1: Requirements & Literature Review (Weeks 1-4)
     \node[anchor=east, font=\scriptsize\bfseries] at (-0.2, 6.4) {1. Requirements \& Literature Review};
-    \draw[fill=blue!60, draw=blue!90, rounded corners=2pt] (0, 6.1) rectangle (4, 6.7);
+    \draw[fill=blue!60, draw=blue!90, rounded corners=2pt] (0, 6.1) rectangle (2.4, 6.7);
     
-    % Task 2: Feasibility Study & Architecture Design
+    % Task 2: Feasibility & System Design (Weeks 3-6)
     \node[anchor=east, font=\scriptsize\bfseries] at (-0.2, 5.2) {2. Feasibility \& System Design};
-    \draw[fill=teal!60, draw=teal!90, rounded corners=2pt] (2, 4.9) rectangle (6, 5.5);
+    \draw[fill=teal!60, draw=teal!90, rounded corners=2pt] (1.2, 4.9) rectangle (3.6, 5.5);
     
-    % Task 3: Huffman Engine Core & Min-Heap Tree
+    % Task 3: Huffman Engine & Min-Heap Tree (Weeks 5-9)
     \node[anchor=east, font=\scriptsize\bfseries] at (-0.2, 4.0) {3. Huffman Engine \& Min-Heap};
-    \draw[fill=cyan!60, draw=cyan!90, rounded corners=2pt] (4, 3.7) rectangle (9, 4.3);
+    \draw[fill=cyan!60, draw=cyan!90, rounded corners=2pt] (2.4, 3.7) rectangle (5.4, 4.3);
     
-    % Task 4: Bit Packing & Archive Serialization
+    % Task 4: Bit Packing & Serialization (Weeks 8-11)
     \node[anchor=east, font=\scriptsize\bfseries] at (-0.2, 2.8) {4. Bit Packing \& Serialization};
-    \draw[fill=orange!60, draw=orange!90, rounded corners=2pt] (7, 2.5) rectangle (11, 3.1);
+    \draw[fill=orange!60, draw=orange!90, rounded corners=2pt] (4.2, 2.5) rectangle (6.6, 3.1);
     
-    % Task 5: Web Dashboard & Decompressor Integration
+    % Task 5: Web Dashboard & Decompressor (Weeks 10-13)
     \node[anchor=east, font=\scriptsize\bfseries] at (-0.2, 1.6) {5. Web Interface \& Decompressor};
-    \draw[fill=purple!50, draw=purple!80, rounded corners=2pt] (9, 1.3) rectangle (13, 1.9);
+    \draw[fill=purple!50, draw=purple!80, rounded corners=2pt] (5.4, 1.3) rectangle (7.8, 1.9);
     
-    % Task 6: Testing, Lossless Verification & Defense
+    % Task 6: Testing, Report & Final Defense (Weeks 13-16)
     \node[anchor=east, font=\scriptsize\bfseries] at (-0.2, 0.4) {6. Testing, Report \& Final Defense};
-    \draw[fill=green!60!black!60, draw=green!70!black, rounded corners=2pt] (12, 0.1) rectangle (16, 0.7);
+    \draw[fill=green!60!black!60, draw=green!70!black, rounded corners=2pt] (7.2, 0.1) rectangle (9.6, 0.7);
     
     % Horizontal Axis Base
-    \draw[thick, black!60] (0, 0) -- (16, 0);
-    \foreach \x in {0, 4, 8, 12, 16} {
+    \draw[thick, black!60] (0, 0) -- (9.6, 0);
+    \foreach \x in {0, 2.4, 4.8, 7.2, 9.6} {
         \draw[thick, black!60] (\x, 0) -- (\x, -0.2);
     }
     \node[below, font=\tiny\bfseries] at (0, -0.2) {W0};
-    \node[below, font=\tiny\bfseries] at (4, -0.2) {W4};
-    \node[below, font=\tiny\bfseries] at (8, -0.2) {W8};
-    \node[below, font=\tiny\bfseries] at (12, -0.2) {W12};
-    \node[below, font=\tiny\bfseries] at (16, -0.2) {W16};
+    \node[below, font=\tiny\bfseries] at (2.4, -0.2) {W4};
+    \node[below, font=\tiny\bfseries] at (4.8, -0.2) {W8};
+    \node[below, font=\tiny\bfseries] at (7.2, -0.2) {W12};
+    \node[below, font=\tiny\bfseries] at (9.6, -0.2) {W16};
 \end{tikzpicture}
-}
-\caption{\textbf{Four-Month Project Timeline Diagram (Gantt Chart)}}
+\captionof{figure}{\textbf{Four-Month Project Timeline Diagram (Gantt Chart)}}
 \label{fig:gantt_diagram}
-\end{figure}
+\end{center}
 
 % ------------------------------------------------------------------------------
 % 6. EXPECTED OUTCOME
@@ -336,7 +343,7 @@ Upon successful completion of the proposed four-month project, the following con
 % ------------------------------------------------------------------------------
 \section{Conclusion}
 
-Data compression remains a cornerstone of efficient digital storage and high-speed communication systems. This project proposal establishes a clear, rigorous engineering roadmap for constructing a **File Compression System Using Huffman Coding**.
+Data compression remains a cornerstone of efficient digital storage and high-speed communication systems. This project proposal establishes a clear, rigorous engineering roadmap for constructing a \textbf{File Compression System Using Huffman Coding}.
 
 By eliminating unnecessary multi-layer complexity and focusing strictly on Huffman entropy encoding, the system achieves optimal prefix-free code synthesis, verified lossless reconstruction, and transparent operational mechanics. The proposed four-month Gantt timeline ensures systematic progress across requirement analysis, algorithmic implementation, empirical testing, and final academic presentation.
 
