@@ -7,37 +7,32 @@ use App\Domain\FileRecord;
 use App\Domain\ActivityLog;
 use App\Interfaces\FileRepositoryInterface;
 use App\Services\HuffmanEngine;
-use App\Services\ZipEngine;
-use App\Services\AesEncryptionService;
 use App\Services\FileStorageService;
 use RuntimeException;
-use Throwable;
 
+/**
+ * CompressionController
+ * Handles file compression and decompression using pure Huffman Coding.
+ */
 class CompressionController {
     private FileRepositoryInterface $repository;
     private HuffmanEngine $huffmanEngine;
-    private ZipEngine $zipEngine;
-    private AesEncryptionService $encryptionService;
     private FileStorageService $storageService;
     private ?\App\Services\AuthService $authService;
 
     public function __construct(
         FileRepositoryInterface $repository,
         HuffmanEngine $huffmanEngine,
-        ZipEngine $zipEngine,
-        AesEncryptionService $encryptionService,
         FileStorageService $storageService,
         ?\App\Services\AuthService $authService = null
     ) {
         $this->repository = $repository;
         $this->huffmanEngine = $huffmanEngine;
-        $this->zipEngine = $zipEngine;
-        $this->encryptionService = $encryptionService;
         $this->storageService = $storageService;
         $this->authService = $authService;
     }
 
-    public function handleCompress(array $fileUpload, string $algorithm, ?string $password): array {
+    public function handleCompress(array $fileUpload): array {
         if (!isset($fileUpload['tmp_name']) || !is_uploaded_file($fileUpload['tmp_name'])) {
             throw new RuntimeException("No valid file uploaded.");
         }
@@ -56,26 +51,15 @@ class CompressionController {
         $originalHash = hash('sha256', $rawData);
         $mimeType = mime_content_type($fileUpload['tmp_name']) ?: 'application/octet-stream';
 
-        // Select compression engine
-        $engine = ($algorithm === 'zip') ? $this->zipEngine : $this->huffmanEngine;
-        $compressionResult = $engine->compress($rawData);
+        // Perform Huffman lossless compression
+        $compressionResult = $this->huffmanEngine->compress($rawData);
         $dataToStore = $compressionResult['compressedData'];
-
-        $isEncrypted = false;
-        $encAlgoName = null;
-        if (!empty($password)) {
-            $dataToStore = $this->encryptionService->encrypt($dataToStore, $password);
-            $isEncrypted = true;
-            $encAlgoName = $this->encryptionService->getAlgorithmName();
-        }
 
         $compressedSize = strlen($dataToStore);
         $compressionRatio = round((1 - ($compressedSize / $originalSize)) * 100, 2);
 
-        // Generate safe unique stored filename
-        $ext = ($algorithm === 'zip') ? '.szip' : '.shuf';
-        $storedName = bin2hex(random_bytes(8)) . '_' . preg_replace('/[^a-zA-Z0-9_\-\.]/', '_', $originalName) . $ext;
-
+        // Generate safe unique stored filename with .shuf extension
+        $storedName = bin2hex(random_bytes(8)) . '_' . preg_replace('/[^a-zA-Z0-9_\-\.]/', '_', $originalName) . '.shuf';
         $this->storageService->saveCompressed($storedName, $dataToStore);
 
         $currentUserId = $this->authService?->getCurrentUser()?->id ?? 1;
@@ -86,9 +70,9 @@ class CompressionController {
             $originalName,
             $storedName,
             $mimeType,
-            $engine->getName(),
-            $isEncrypted,
-            $encAlgoName,
+            'Huffman',
+            false,
+            null,
             $originalSize,
             $compressedSize,
             $compressionRatio,
@@ -106,20 +90,19 @@ class CompressionController {
             $originalName,
             'SUCCESS',
             $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1',
-            "Algorithm: {$engine->getName()}, Encrypted: " . ($isEncrypted ? 'YES' : 'NO') . ", Ratio: {$compressionRatio}%"
+            "Algorithm: Huffman Coding, Saved: {$compressionRatio}%"
         ));
 
         return [
             'success' => true,
             'file' => $fileRecord->toArray(),
-            'stats' => $compressionResult['stats'],
-            'codebook' => $compressionResult['codebook'],
-            'tree' => $compressionResult['tree'],
+            'stats' => $compressionResult['stats'] ?? [],
+            'codebook' => $compressionResult['codebook'] ?? [],
             'downloadUrl' => "api.php?action=download&id={$fileId}"
         ];
     }
 
-    public function handleDecompress(?array $fileUpload, ?int $fileId, ?string $password): array {
+    public function handleDecompress(?array $fileUpload, ?int $fileId): array {
         $dataToDecompress = '';
         $originalFileName = 'restored_file';
         $expectedHash = null;
@@ -134,37 +117,17 @@ class CompressionController {
             $expectedHash = $fileRecord->sha256Checksum;
         } elseif ($fileUpload !== null && isset($fileUpload['tmp_name']) && is_uploaded_file($fileUpload['tmp_name'])) {
             $dataToDecompress = file_get_contents($fileUpload['tmp_name']);
-            $originalFileName = preg_replace('/(\.shuf|\.szip)$/i', '', basename($fileUpload['name']));
+            $originalFileName = preg_replace('/(\.shuf)$/i', '', basename($fileUpload['name']));
         } else {
-            throw new RuntimeException("Please provide a file to decompress.");
+            throw new RuntimeException("Please provide a .shuf file to decompress.");
         }
 
-        // Check if data is encrypted (starts with ENC1)
-        if (str_starts_with($dataToDecompress, 'ENC1')) {
-            if (empty($password)) {
-                return [
-                    'success' => false,
-                    'isPasswordRequired' => true,
-                    'message' => 'This archive is protected with AES-256 encryption. Please provide the decryption password.'
-                ];
-            }
-            $dataToDecompress = $this->encryptionService->decrypt($dataToDecompress, $password);
+        // Decompress using Huffman Engine
+        if (!str_starts_with($dataToDecompress, 'HUF1')) {
+            throw new RuntimeException("Invalid file format. Expected a valid Huffman archive (.shuf).");
         }
 
-        // Determine algorithm from magic header
-        $decompressed = '';
-        $detectedAlgorithm = '';
-
-        if (str_starts_with($dataToDecompress, 'HUF1')) {
-            $decompressed = $this->huffmanEngine->decompress($dataToDecompress);
-            $detectedAlgorithm = 'Huffman';
-        } elseif (str_starts_with($dataToDecompress, 'ZIP1')) {
-            $decompressed = $this->zipEngine->decompress($dataToDecompress);
-            $detectedAlgorithm = 'Deflate (Zip)';
-        } else {
-            throw new RuntimeException("Unrecognized compression format or wrong password.");
-        }
-
+        $decompressed = $this->huffmanEngine->decompress($dataToDecompress);
         $decompressedHash = hash('sha256', $decompressed);
         $integrityMatch = ($expectedHash !== null) ? hash_equals($expectedHash, $decompressedHash) : true;
 
@@ -179,14 +142,14 @@ class CompressionController {
             $originalFileName,
             $integrityMatch ? 'SUCCESS' : 'FAILED',
             $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1',
-            "Algorithm: {$detectedAlgorithm}, Integrity: " . ($integrityMatch ? 'VALID' : 'HASH MISMATCH')
+            "Algorithm: Huffman Coding, Integrity: " . ($integrityMatch ? 'VALID' : 'HASH MISMATCH')
         ));
 
         return [
             'success' => true,
             'originalName' => $originalFileName,
             'restoredSize' => strlen($decompressed),
-            'algorithm' => $detectedAlgorithm,
+            'algorithm' => 'Huffman Coding',
             'sha256Checksum' => $decompressedHash,
             'integrityVerified' => $integrityMatch,
             'downloadUrl' => "api.php?action=download_decompressed&file=" . urlencode($restoredFilename) . "&name=" . urlencode($originalFileName)

@@ -6,8 +6,6 @@ require_once dirname(__DIR__) . '/config/app.php';
 use App\Repositories\DatabaseFileRepository;
 use App\Repositories\DatabaseUserRepository;
 use App\Services\HuffmanEngine;
-use App\Services\ZipEngine;
-use App\Services\AesEncryptionService;
 use App\Services\FileStorageService;
 use App\Services\AuthService;
 use App\Controllers\CompressionController;
@@ -20,15 +18,11 @@ $userRepository = new DatabaseUserRepository();
 $authService = new AuthService($userRepository);
 
 $huffmanEngine = new HuffmanEngine();
-$zipEngine = new ZipEngine();
-$encryptionService = new AesEncryptionService();
 $storageService = new FileStorageService();
 
 $compressionController = new CompressionController(
     $repository,
     $huffmanEngine,
-    $zipEngine,
-    $encryptionService,
     $storageService,
     $authService
 );
@@ -97,24 +91,15 @@ try {
             break;
 
         case 'compress':
-            $algorithm = $_POST['algorithm'] ?? 'huffman';
-            $password = $_POST['password'] ?? null;
-            if (!empty($password)) {
-                $password = trim($password);
-            }
             $fileUpload = $_FILES['file'] ?? [];
-            $response = $compressionController->handleCompress($fileUpload, $algorithm, $password);
+            $response = $compressionController->handleCompress($fileUpload);
             echo json_encode($response);
             break;
 
         case 'decompress':
             $fileUpload = $_FILES['file'] ?? null;
             $fileId = isset($_POST['file_id']) ? (int)$_POST['file_id'] : null;
-            $password = $_POST['password'] ?? null;
-            if (!empty($password)) {
-                $password = trim($password);
-            }
-            $response = $compressionController->handleDecompress($fileUpload, $fileId, $password);
+            $response = $compressionController->handleDecompress($fileUpload, $fileId);
             echo json_encode($response);
             break;
 
